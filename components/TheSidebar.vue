@@ -37,7 +37,7 @@
       </li>
     </ul>
 
-    <div class="sidebar__footer">
+    <div class="sidebar__footer mt-5">
       <ul class="sidebar__footer-list">
         <li class="list-item px-3 py-2">Support Center</li>
         <li class="list-item px-3 py-2">User Profie</li>
