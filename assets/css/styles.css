@@ -1,7 +1,5 @@
 /* stylelint-disable no-descending-specificity */
 
-@import '~mdb-ui-kit/css/mdb.min.css';
-
 html,
 body {
   height: 100%;
@@ -124,6 +122,7 @@ body {
   width: calc(100% - 250px);
   height: calc(100% - 86px);
   background-color: #fbfbfb;
+  overflow-y: auto;
 }
 
 .main__tabs {
@@ -227,4 +226,81 @@ body {
 
 .selected-filters__btns span:hover {
   background-color: #ddd;
+}
+
+.selected-filters__controls {
+  column-gap: 20px;
+}
+
+.selected-filters__controls .range {
+  width: 200px;
+  margin-top: 8px;
+}
+
+.multi-range-slider {
+  border: none !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  width: 100% !important;
+}
+
+.multi-range-slider .ruler {
+  display: none !important;
+}
+
+.multi-range-slider .label {
+  display: none !important;
+}
+
+.multi-range-slider .bar-left,
+.multi-range-slider .bar-inner,
+.multi-range-slider .bar-right {
+  box-shadow: none !important;
+  border: 1px solid silver !important;
+  background-color: white !important;
+}
+
+.multi-range-slider .bar-inner {
+  background-color: #bfecf8 !important;
+}
+
+.multi-range-slider .thumb::before {
+  border: none !important;
+  box-shadow: none !important;
+  background-color: #167795 !important;
+  margin: -5px !important;
+}
+
+.results__controls {
+  display: flex;
+  align-items: center;
+  column-gap: 20px;
+  font-size: 18px;
+}
+
+.results__controls .refresh-text {
+  font-size: 12px;
+}
+
+.results__controls svg {
+  cursor: pointer;
+}
+
+.results__date {
+  color: #1d8b96;
+}
+
+.results__date span,
+.results__date svg {
+  cursor: pointer;
+}
+
+.results__play-btn {
+  color: #1d8b96;
+  font-size: 32px;
+}
+
+.results__play-btn svg {
+  cursor: pointer;
+  margin-right: 40px;
 }
