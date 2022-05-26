@@ -14,12 +14,20 @@ export default {
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: ['@assets/css/normalize.css', '@assets/css/styles.css'],
+  css: [
+    '@assets/css/normalize.css',
+    'vue-multiselect/dist/vue-multiselect.min.css',
+    '@assets/css/styles.css',
+  ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     {
       src: '~/plugins/multi-range-slider.js',
+      mode: 'client',
+    },
+    {
+      src: '~/plugins/multiselect.js',
       mode: 'client',
     },
   ],

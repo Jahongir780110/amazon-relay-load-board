@@ -14,6 +14,8 @@ body {
   height: 100%;
 }
 
+/* =========================== sidebar start =========================== */
+
 .sidebar {
   position: absolute;
   top: 0;
@@ -74,6 +76,10 @@ body {
   color: #168cc7;
 }
 
+/* =========================== sidebar end =========================== */
+
+/* =========================== header start =========================== */
+
 .header {
   position: absolute;
   top: 0;
@@ -115,6 +121,10 @@ body {
   font-size: 12px;
 }
 
+/* =========================== header end =========================== */
+
+/* =========================== main start =========================== */
+
 .main-content {
   position: absolute;
   top: 86px;
@@ -145,10 +155,14 @@ body {
   border-bottom: 4px solid #1fafd9;
 }
 
+/* =========================== main end =========================== */
+
 .filters__main {
   background-color: #f4f4f4;
   padding: 8px;
 }
+
+/* =========================== filters head start =========================== */
 
 .filters__head {
   display: flex;
@@ -168,6 +182,70 @@ body {
   background-color: #ddd;
 }
 
+/* =========================== filters head end =========================== */
+
+/* =========================== filters fields start =========================== */
+
+.filters__fields {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 10px;
+  row-gap: 16px;
+}
+
+.filters__fields .work-type {
+  width: 200px;
+}
+
+.filters__fields .origin {
+  width: 250px;
+}
+
+.filters__fields .radius {
+  width: 120px;
+}
+
+.filters__fields .destination {
+  width: 360px;
+}
+
+.filters__fields .excluded-cities {
+  width: 230px;
+}
+
+.filters__fields .start-date,
+.filters__fields .end-date,
+.filters__fields .start-time,
+.filters__fields .end-time {
+  width: 150px;
+}
+
+.filters__fields .trailer-status {
+  width: 280px;
+}
+
+.filters__fields .equipment {
+  width: 280px;
+}
+
+.filters__fields .load-type {
+  width: 280px;
+}
+
+.filters__fields .driver-type {
+  width: 280px;
+}
+
+.filters__fields .price,
+.filters__fields .payout,
+.filters__fields .stops {
+  width: 350px;
+}
+
+/* =========================== filters fields end =========================== */
+
+/* =========================== filters footer start =========================== */
+
 .filters__footer .more-less {
   cursor: pointer;
   padding: 4px 8px;
@@ -182,6 +260,10 @@ body {
 .filters__footer .more-less:hover {
   background-color: #ddd;
 }
+
+/* =========================== filters footer end =========================== */
+
+/* =========================== filters result start =========================== */
 
 .selected-filters__tag {
   position: relative;
@@ -303,4 +385,133 @@ body {
 .results__play-btn svg {
   cursor: pointer;
   margin-right: 40px;
+}
+
+/* =========================== filters result end =========================== */
+
+/* =========================== ui styles start =========================== */
+
+.multiselect__tags-wrap {
+  display: none !important;
+}
+
+.multiselect__tags {
+  border: 1px solid #000 !important;
+  cursor: pointer !important;
+}
+
+.multiselect__content-wrapper {
+  border: 1px solid #000 !important;
+}
+
+.multiselect__content-wrapper .multiselect__option--highlight {
+  background-color: #107c99;
+  font-weight: normal !important;
+  color: #fff !important;
+}
+
+.multiselect__content-wrapper .multiselect__option--selected {
+  background-color: #0e6883;
+  font-weight: normal !important;
+  color: #fff !important;
+}
+
+.multiselect__content-wrapper .multiselect__option--selected::before {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+}
+
+.select-field {
+  position: relative;
+}
+
+.select-field .label {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 9999;
+  transition: 0.3s;
+}
+
+.select-field .label.active {
+  font-size: 12px;
+  top: 2px;
+  pointer-events: none;
+}
+
+.select-field .value {
+  font-size: 15px;
+  position: absolute;
+  bottom: 3px;
+  left: 8px;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.date-field,
+.time-field,
+.input-field {
+  position: relative;
+}
+
+.b-form-datepicker,
+.b-form-timepicker {
+  border: 1px solid #000 !important;
+}
+
+.b-form-datepicker button,
+.b-form-timepicker button {
+  width: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  overflow: hidden;
+}
+
+.b-form-datepicker label,
+.b-form-timepicker label {
+  padding-left: 0.75rem !important;
+  padding-right: 44px !important;
+}
+
+.date-field > svg,
+.time-field > svg {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+
+.input-field .form-control {
+  border: 1px solid #000 !important;
+  outline: none !important;
+  box-shadow: none !important;
+  font-size: 15px;
+  color: #000;
+  padding-bottom: 0 !important;
+  padding-top: 14px !important;
+  height: 38px !important;
+}
+
+.input-field .input-group-text {
+  border: 1px solid #000 !important;
+  border-right: none !important;
+}
+
+.input-field .label {
+  position: absolute;
+  top: 8px;
+  left: 46px;
+  z-index: 9999;
+  transition: 0.3s;
+}
+
+.input-field .label.active {
+  font-size: 12px;
+  top: 2px;
+  pointer-events: none;
 }

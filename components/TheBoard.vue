@@ -1,5 +1,5 @@
 <template>
-  <section class="board mt-4">The Board</section>
+  <section class="board mt-4">TheBoard</section>
 </template>
 
 <script>
