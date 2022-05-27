@@ -211,6 +211,36 @@
             placeholder=""
           />
         </div>
+
+        <div class="wrapper d-flex">
+          <div class="select-field trip-length">
+            <div class="label active">Trip length</div>
+            <div class="value">3 selected</div>
+            <multiselect
+              v-model="workType"
+              :options="workOptions"
+              :multiple="true"
+              :close-on-select="false"
+              :searchable="false"
+              :show-labels="false"
+              placeholder=""
+            />
+          </div>
+
+          <div class="input-field min-hours">
+            <div class="label active">Hours (min.)</div>
+            <b-input-group>
+              <b-form-input placeholder=""></b-form-input>
+            </b-input-group>
+          </div>
+
+          <div class="input-field max-hours">
+            <div class="label">Hours (max.)</div>
+            <b-input-group>
+              <b-form-input placeholder=""></b-form-input>
+            </b-input-group>
+          </div>
+        </div>
       </div>
 
       <div

@@ -239,7 +239,21 @@ body {
 .filters__fields .price,
 .filters__fields .payout,
 .filters__fields .stops {
-  width: 350px;
+  width: 300px;
+}
+
+.filters__fields .trip-length {
+  width: 280px;
+}
+
+.filters__fields .min-hours,
+.filters__fields .max-hours {
+  width: 160px;
+}
+
+.filters__fields .min-hours .label,
+.filters__fields .max-hours .label {
+  left: 0.75rem !important;
 }
 
 /* =========================== filters fields end =========================== */
@@ -390,6 +404,9 @@ body {
 /* =========================== filters result end =========================== */
 
 /* =========================== ui styles start =========================== */
+.multiselect {
+  position: static !important;
+}
 
 .multiselect__tags-wrap {
   display: none !important;
@@ -402,6 +419,7 @@ body {
 
 .multiselect__content-wrapper {
   border: 1px solid #000 !important;
+  z-index: 999999 !important;
 }
 
 .multiselect__content-wrapper .multiselect__option--highlight {
@@ -434,12 +452,12 @@ body {
   left: 8px;
   z-index: 9999;
   transition: 0.3s;
+  pointer-events: none;
 }
 
 .select-field .label.active {
   font-size: 12px;
   top: 2px;
-  pointer-events: none;
 }
 
 .select-field .value {
@@ -455,6 +473,12 @@ body {
 .time-field,
 .input-field {
   position: relative;
+}
+
+.date-field .form-control,
+.time-field .form-control,
+.input-field .form-control {
+  height: 40px !important;
 }
 
 .b-form-datepicker,
@@ -494,7 +518,6 @@ body {
   color: #000;
   padding-bottom: 0 !important;
   padding-top: 14px !important;
-  height: 38px !important;
 }
 
 .input-field .input-group-text {
@@ -508,10 +531,10 @@ body {
   left: 46px;
   z-index: 9999;
   transition: 0.3s;
+  pointer-events: none;
 }
 
 .input-field .label.active {
   font-size: 12px;
   top: 2px;
-  pointer-events: none;
 }
