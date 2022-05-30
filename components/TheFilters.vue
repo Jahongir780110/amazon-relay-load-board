@@ -7,7 +7,7 @@
         <span>Save this search</span>
       </div>
 
-      <div class="filters__fields mt-2" :class="{ hidden: isHidden }">
+      <div class="filters__fields mt-2">
         <div class="select-field work-type">
           <div
             class="label"
@@ -152,231 +152,236 @@
           </div>
         </div>
 
-        <div class="wrapper d-flex">
-          <div class="date-field end-date">
-            <div
-              class="label"
-              :class="{ active: activeInput === 8 || endDate }"
-            >
-              End date
-            </div>
-            <b-form-datepicker
-              v-model="endDate"
-              placeholder=""
-              :date-format-options="{
-                year: 'numeric',
-                month: 'numeric',
-                day: 'numeric',
-              }"
-              @shown="activeInput = 8"
-              @hidden="activeInput = 0"
-            ></b-form-datepicker>
-            <b-icon-calendar-3></b-icon-calendar-3>
-          </div>
-
-          <div class="time-field end-time">
-            <div
-              class="label"
-              :class="{ active: activeInput === 9 || endTime }"
-            >
-              End time
-            </div>
-            <b-form-timepicker
-              v-model="endTime"
-              placeholder=""
-              @shown="activeInput = 9"
-              @hidden="activeInput = 0"
-            ></b-form-timepicker>
-            <b-icon-clock></b-icon-clock>
-          </div>
-        </div>
-
-        <div class="wrapper d-flex">
-          <div class="select-field trailer-status">
-            <div
-              class="label"
-              :class="{ active: activeInput === 10 || trailerStatus }"
-            >
-              Trailer Status
-            </div>
-            <div v-if="trailerStatus" class="value">{{ trailerStatus }}</div>
-            <multiselect
-              v-model="trailerStatus"
-              :options="trailerOptions"
-              :multiple="false"
-              :close-on-select="true"
-              :searchable="false"
-              :show-labels="false"
-              placeholder=""
-              @open="activeInput = 10"
-              @close="activeInput = 0"
-            />
-          </div>
-
-          <div class="select-field equipment">
-            <div
-              class="label"
-              :class="{ active: activeInput === 11 || equipment }"
-            >
-              Equipment
-            </div>
-            <div v-if="equipment" class="value">{{ equipment }}</div>
-            <multiselect
-              v-model="equipment"
-              :options="equipmentOptions"
-              :multiple="false"
-              :close-on-select="true"
-              :searchable="false"
-              :show-labels="false"
-              placeholder=""
-              @open="activeInput = 11"
-              @close="activeInput = 0"
-            />
-          </div>
-        </div>
-
-        <div class="select-field load-type">
-          <div
-            class="label"
-            :class="{ active: activeInput === 12 || loadType }"
-          >
-            Load Type
-          </div>
-          <div v-if="loadType" class="value">{{ loadType }}</div>
-          <multiselect
-            v-model="loadType"
-            :options="loadOptions"
-            :multiple="false"
-            :close-on-select="true"
-            :searchable="false"
-            :show-labels="false"
-            placeholder=""
-            @open="activeInput = 12"
-            @close="activeInput = 0"
-          />
-        </div>
-
-        <div class="select-field driver-type">
-          <div
-            class="label"
-            :class="{ active: activeInput === 13 || driverType }"
-          >
-            Driver Type
-          </div>
-          <div v-if="driverType" class="value">{{ driverType }}</div>
-          <multiselect
-            v-model="driverType"
-            :options="loadOptions"
-            :multiple="false"
-            :close-on-select="true"
-            :searchable="false"
-            :show-labels="false"
-            placeholder=""
-            @open="activeInput = 13"
-            @close="activeInput = 0"
-          />
-        </div>
-
-        <div class="input-field price">
-          <div class="label" :class="{ active: activeInput === 14 || price }">
-            Price/mile (min)
-          </div>
-          <b-input-group prepend="$">
-            <b-form-input
-              v-model="price"
-              placeholder=""
-              @focus="activeInput = 14"
-              @blur="activeInput = 0"
-            ></b-form-input>
-          </b-input-group>
-        </div>
-
-        <div class="input-field payout">
-          <div class="label" :class="{ active: activeInput === 15 || payout }">
-            Payout (min)
-          </div>
-          <b-input-group prepend="$">
-            <b-form-input
-              v-model="payout"
-              placeholder=""
-              @focus="activeInput = 15"
-              @blur="activeInput = 0"
-            ></b-form-input>
-          </b-input-group>
-        </div>
-
-        <div class="select-field stops">
-          <div class="label" :class="{ active: activeInput === 16 || stops }">
-            Stops (max)
-          </div>
-          <div v-if="stops" class="value">{{ stops }}</div>
-          <multiselect
-            v-model="stops"
-            :options="stopOptions"
-            :multiple="false"
-            :close-on-select="true"
-            :searchable="false"
-            :show-labels="false"
-            placeholder=""
-            @open="activeInput = 16"
-            @close="activeInput = 0"
-          />
-        </div>
-
-        <div class="wrapper d-flex">
-          <div class="select-field trip-length">
-            <div
-              class="label"
-              :class="{ active: activeInput === 17 || tripLength }"
-            >
-              Trip length
-            </div>
-            <div v-if="tripLength" class="value">{{ tripLength }}</div>
-            <multiselect
-              v-model="tripLength"
-              :options="triOptions"
-              :multiple="false"
-              :close-on-select="true"
-              :searchable="false"
-              :show-labels="false"
-              placeholder=""
-              @open="activeInput = 17"
-              @close="activeInput = 0"
-            />
-          </div>
-
-          <div class="input-field min-hours">
-            <div
-              class="label"
-              :class="{ active: activeInput === 18 || minHours }"
-            >
-              Hours (min.)
-            </div>
-            <b-input-group>
-              <b-form-input
-                v-model="minHours"
+        <div class="bottom" :class="{ hidden: isHidden }">
+          <div class="wrapper d-flex">
+            <div class="date-field end-date">
+              <div
+                class="label"
+                :class="{ active: activeInput === 8 || endDate }"
+              >
+                End date
+              </div>
+              <b-form-datepicker
+                v-model="endDate"
                 placeholder=""
-                @focus="activeInput = 18"
+                :date-format-options="{
+                  year: 'numeric',
+                  month: 'numeric',
+                  day: 'numeric',
+                }"
+                @shown="activeInput = 8"
+                @hidden="activeInput = 0"
+              ></b-form-datepicker>
+              <b-icon-calendar-3></b-icon-calendar-3>
+            </div>
+
+            <div class="time-field end-time">
+              <div
+                class="label"
+                :class="{ active: activeInput === 9 || endTime }"
+              >
+                End time
+              </div>
+              <b-form-timepicker
+                v-model="endTime"
+                placeholder=""
+                @shown="activeInput = 9"
+                @hidden="activeInput = 0"
+              ></b-form-timepicker>
+              <b-icon-clock></b-icon-clock>
+            </div>
+          </div>
+
+          <div class="wrapper d-flex">
+            <div class="select-field trailer-status">
+              <div
+                class="label"
+                :class="{ active: activeInput === 10 || trailerStatus }"
+              >
+                Trailer Status
+              </div>
+              <div v-if="trailerStatus" class="value">{{ trailerStatus }}</div>
+              <multiselect
+                v-model="trailerStatus"
+                :options="trailerOptions"
+                :multiple="false"
+                :close-on-select="true"
+                :searchable="false"
+                :show-labels="false"
+                placeholder=""
+                @open="activeInput = 10"
+                @close="activeInput = 0"
+              />
+            </div>
+
+            <div class="select-field equipment">
+              <div
+                class="label"
+                :class="{ active: activeInput === 11 || equipment }"
+              >
+                Equipment
+              </div>
+              <div v-if="equipment" class="value">{{ equipment }}</div>
+              <multiselect
+                v-model="equipment"
+                :options="equipmentOptions"
+                :multiple="false"
+                :close-on-select="true"
+                :searchable="false"
+                :show-labels="false"
+                placeholder=""
+                @open="activeInput = 11"
+                @close="activeInput = 0"
+              />
+            </div>
+          </div>
+
+          <div class="select-field load-type">
+            <div
+              class="label"
+              :class="{ active: activeInput === 12 || loadType }"
+            >
+              Load Type
+            </div>
+            <div v-if="loadType" class="value">{{ loadType }}</div>
+            <multiselect
+              v-model="loadType"
+              :options="loadOptions"
+              :multiple="false"
+              :close-on-select="true"
+              :searchable="false"
+              :show-labels="false"
+              placeholder=""
+              @open="activeInput = 12"
+              @close="activeInput = 0"
+            />
+          </div>
+
+          <div class="select-field driver-type">
+            <div
+              class="label"
+              :class="{ active: activeInput === 13 || driverType }"
+            >
+              Driver Type
+            </div>
+            <div v-if="driverType" class="value">{{ driverType }}</div>
+            <multiselect
+              v-model="driverType"
+              :options="loadOptions"
+              :multiple="false"
+              :close-on-select="true"
+              :searchable="false"
+              :show-labels="false"
+              placeholder=""
+              @open="activeInput = 13"
+              @close="activeInput = 0"
+            />
+          </div>
+
+          <div class="input-field price">
+            <div class="label" :class="{ active: activeInput === 14 || price }">
+              Price/mile (min)
+            </div>
+            <b-input-group prepend="$">
+              <b-form-input
+                v-model="price"
+                placeholder=""
+                @focus="activeInput = 14"
                 @blur="activeInput = 0"
               ></b-form-input>
             </b-input-group>
           </div>
 
-          <div class="input-field max-hours">
+          <div class="input-field payout">
             <div
               class="label"
-              :class="{ active: activeInput === 19 || maxHours }"
+              :class="{ active: activeInput === 15 || payout }"
             >
-              Hours (max.)
+              Payout (min)
             </div>
-            <b-input-group>
+            <b-input-group prepend="$">
               <b-form-input
-                v-model="maxHours"
+                v-model="payout"
                 placeholder=""
-                @focus="activeInput = 19"
+                @focus="activeInput = 15"
                 @blur="activeInput = 0"
               ></b-form-input>
             </b-input-group>
+          </div>
+
+          <div class="select-field stops">
+            <div class="label" :class="{ active: activeInput === 16 || stops }">
+              Stops (max)
+            </div>
+            <div v-if="stops" class="value">{{ stops }}</div>
+            <multiselect
+              v-model="stops"
+              :options="stopOptions"
+              :multiple="false"
+              :close-on-select="true"
+              :searchable="false"
+              :show-labels="false"
+              placeholder=""
+              @open="activeInput = 16"
+              @close="activeInput = 0"
+            />
+          </div>
+
+          <div class="wrapper d-flex">
+            <div class="select-field trip-length">
+              <div
+                class="label"
+                :class="{ active: activeInput === 17 || tripLength }"
+              >
+                Trip length
+              </div>
+              <div v-if="tripLength" class="value">{{ tripLength }}</div>
+              <multiselect
+                v-model="tripLength"
+                :options="triOptions"
+                :multiple="false"
+                :close-on-select="true"
+                :searchable="false"
+                :show-labels="false"
+                placeholder=""
+                @open="activeInput = 17"
+                @close="activeInput = 0"
+              />
+            </div>
+
+            <div class="input-field min-hours">
+              <div
+                class="label"
+                :class="{ active: activeInput === 18 || minHours }"
+              >
+                Hours (min.)
+              </div>
+              <b-input-group>
+                <b-form-input
+                  v-model="minHours"
+                  placeholder=""
+                  @focus="activeInput = 18"
+                  @blur="activeInput = 0"
+                ></b-form-input>
+              </b-input-group>
+            </div>
+
+            <div class="input-field max-hours">
+              <div
+                class="label"
+                :class="{ active: activeInput === 19 || maxHours }"
+              >
+                Hours (max.)
+              </div>
+              <b-input-group>
+                <b-form-input
+                  v-model="maxHours"
+                  placeholder=""
+                  @focus="activeInput = 19"
+                  @blur="activeInput = 0"
+                ></b-form-input>
+              </b-input-group>
+            </div>
           </div>
         </div>
       </div>
@@ -421,7 +426,6 @@
         </div>
 
         <div class="selected-filters__controls mt-3 d-flex">
-          <!-- input range -->
           <client-only>
             <div class="range d-flex flex-column">
               <multi-range-slider
@@ -439,11 +443,17 @@
             </div>
           </client-only>
           <div class="checkboxes">
-            <b-form-checkbox> Highlighted at the top </b-form-checkbox>
-            <b-form-checkbox> Click-to-book </b-form-checkbox>
+            <b-form-checkbox v-model="isHighlightedAtTop">
+              Highlighted at the top
+            </b-form-checkbox>
+            <b-form-checkbox v-model="isClickToBook">
+              Click-to-book
+            </b-form-checkbox>
           </div>
           <div class="checkboxes">
-            <b-form-checkbox> Refresh Range </b-form-checkbox>
+            <b-form-checkbox v-model="isRefreshRange">
+              Refresh Range
+            </b-form-checkbox>
           </div>
         </div>
       </div>
@@ -547,6 +557,9 @@ export default {
       showEarlyAccess: false,
       barMinValue: 0.6,
       barMaxValue: 1.5,
+      isHighlightedAtTop: false,
+      isClickToBook: false,
+      isRefreshRange: false,
     }
   },
   methods: {

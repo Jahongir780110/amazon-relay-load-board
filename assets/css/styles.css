@@ -193,9 +193,15 @@ body {
   row-gap: 16px;
 }
 
-.filters__fields.hidden {
-  height: 48px;
-  overflow-y: hidden;
+.filters__fields .bottom {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 10px;
+  row-gap: 16px;
+}
+
+.filters__fields .bottom.hidden {
+  display: none;
 }
 
 .filters__fields .work-type {
