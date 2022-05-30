@@ -7,10 +7,17 @@
         <span>Save this search</span>
       </div>
 
-      <div class="filters__fields mt-2">
+      <div class="filters__fields mt-2" :class="{ hidden: isHidden }">
         <div class="select-field work-type">
-          <div class="label active">Work type</div>
-          <div class="value">3 selected</div>
+          <div
+            class="label"
+            :class="{ active: activeInput === 1 || workType.length > 0 }"
+          >
+            Work type
+          </div>
+          <div v-if="workType.length > 0" class="value">
+            {{ workType.length }} selected
+          </div>
           <multiselect
             v-model="workType"
             :options="workOptions"
@@ -19,70 +26,101 @@
             :searchable="false"
             :show-labels="false"
             placeholder=""
+            @open="activeInput = 1"
+            @close="activeInput = 0"
           />
         </div>
 
         <div class="wrapper d-flex">
           <div class="select-field origin">
-            <div class="label active">Origin</div>
-            <div class="value">3 selected</div>
+            <div class="label" :class="{ active: activeInput === 2 || origin }">
+              Origin
+            </div>
+            <div v-if="origin" class="value">{{ origin }}</div>
             <multiselect
-              v-model="workType"
-              :options="workOptions"
-              :multiple="true"
-              :close-on-select="false"
+              v-model="origin"
+              :options="originOptions"
+              :multiple="false"
+              :close-on-select="true"
               :searchable="false"
               :show-labels="false"
               placeholder=""
+              @open="activeInput = 2"
+              @close="activeInput = 0"
             />
           </div>
 
           <div class="select-field radius">
-            <div class="label active">Radius</div>
-            <div class="value">3 selected</div>
+            <div class="label" :class="{ active: activeInput === 3 || radius }">
+              Radius
+            </div>
+            <div v-if="radius" class="value">{{ radius }}</div>
             <multiselect
-              v-model="workType"
-              :options="workOptions"
-              :multiple="true"
-              :close-on-select="false"
+              v-model="radius"
+              :options="radiusOptions"
+              :multiple="false"
+              :close-on-select="true"
               :searchable="false"
               :show-labels="false"
               placeholder=""
+              @open="activeInput = 3"
+              @close="activeInput = 0"
             />
           </div>
         </div>
 
         <div class="select-field destination">
-          <div class="label active">Destination</div>
-          <div class="value">3 selected</div>
+          <div
+            class="label"
+            :class="{ active: activeInput === 4 || destination }"
+          >
+            Destination
+          </div>
+          <div v-if="destination" class="value">{{ destination }}</div>
           <multiselect
-            v-model="workType"
-            :options="workOptions"
-            :multiple="true"
-            :close-on-select="false"
+            v-model="destination"
+            :options="originOptions"
+            :multiple="false"
+            :close-on-select="true"
             :searchable="false"
             :show-labels="false"
             placeholder=""
+            @open="activeInput = 4"
+            @close="activeInput = 0"
           />
         </div>
 
         <div class="select-field excluded-cities">
-          <div class="label active">Excluded cities (3 max)</div>
-          <div class="value">3 selected</div>
+          <div
+            class="label"
+            :class="{ active: activeInput === 5 || excludedCities.length > 0 }"
+          >
+            Excluded cities (3 max)
+          </div>
+          <div v-if="excludedCities.length > 0" class="value">
+            {{ excludedCities.length }} selected
+          </div>
           <multiselect
-            v-model="workType"
-            :options="workOptions"
+            v-model="excludedCities"
+            :options="originOptions.slice(1)"
             :multiple="true"
             :close-on-select="false"
             :searchable="false"
             :show-labels="false"
             placeholder=""
+            @open="activeInput = 5"
+            @close="activeInput = 0"
           />
         </div>
 
         <div class="wrapper d-flex">
           <div class="date-field start-date">
-            <div class="label active">Start date</div>
+            <div
+              class="label"
+              :class="{ active: activeInput === 6 || startDate }"
+            >
+              Start date
+            </div>
             <b-form-datepicker
               v-model="startDate"
               placeholder=""
@@ -91,15 +129,24 @@
                 month: 'numeric',
                 day: 'numeric',
               }"
+              @shown="activeInput = 6"
+              @hidden="activeInput = 0"
             ></b-form-datepicker>
             <b-icon-calendar-3></b-icon-calendar-3>
           </div>
 
           <div class="time-field start-time">
-            <div class="label active">Start time</div>
+            <div
+              class="label"
+              :class="{ active: activeInput === 7 || startTime }"
+            >
+              Start time
+            </div>
             <b-form-timepicker
               v-model="startTime"
               placeholder=""
+              @shown="activeInput = 7"
+              @hidden="activeInput = 0"
             ></b-form-timepicker>
             <b-icon-clock></b-icon-clock>
           </div>
@@ -107,7 +154,12 @@
 
         <div class="wrapper d-flex">
           <div class="date-field end-date">
-            <div class="label active">End date</div>
+            <div
+              class="label"
+              :class="{ active: activeInput === 8 || endDate }"
+            >
+              End date
+            </div>
             <b-form-datepicker
               v-model="endDate"
               placeholder=""
@@ -116,15 +168,24 @@
                 month: 'numeric',
                 day: 'numeric',
               }"
+              @shown="activeInput = 8"
+              @hidden="activeInput = 0"
             ></b-form-datepicker>
             <b-icon-calendar-3></b-icon-calendar-3>
           </div>
 
           <div class="time-field end-time">
-            <div class="label">Start time</div>
+            <div
+              class="label"
+              :class="{ active: activeInput === 9 || endTime }"
+            >
+              End time
+            </div>
             <b-form-timepicker
               v-model="endTime"
               placeholder=""
+              @shown="activeInput = 9"
+              @hidden="activeInput = 0"
             ></b-form-timepicker>
             <b-icon-clock></b-icon-clock>
           </div>
@@ -132,116 +193,189 @@
 
         <div class="wrapper d-flex">
           <div class="select-field trailer-status">
-            <div class="label active">Trailer Status</div>
-            <div class="value">3 selected</div>
+            <div
+              class="label"
+              :class="{ active: activeInput === 10 || trailerStatus }"
+            >
+              Trailer Status
+            </div>
+            <div v-if="trailerStatus" class="value">{{ trailerStatus }}</div>
             <multiselect
-              v-model="workType"
-              :options="workOptions"
-              :multiple="true"
-              :close-on-select="false"
+              v-model="trailerStatus"
+              :options="trailerOptions"
+              :multiple="false"
+              :close-on-select="true"
               :searchable="false"
               :show-labels="false"
               placeholder=""
+              @open="activeInput = 10"
+              @close="activeInput = 0"
             />
           </div>
 
           <div class="select-field equipment">
-            <div class="label active">Equipment</div>
-            <div class="value">3 selected</div>
+            <div
+              class="label"
+              :class="{ active: activeInput === 11 || equipment }"
+            >
+              Equipment
+            </div>
+            <div v-if="equipment" class="value">{{ equipment }}</div>
             <multiselect
-              v-model="workType"
-              :options="workOptions"
-              :multiple="true"
-              :close-on-select="false"
+              v-model="equipment"
+              :options="equipmentOptions"
+              :multiple="false"
+              :close-on-select="true"
               :searchable="false"
               :show-labels="false"
               placeholder=""
+              @open="activeInput = 11"
+              @close="activeInput = 0"
             />
           </div>
         </div>
 
         <div class="select-field load-type">
-          <div class="label active">Load Type</div>
-          <div class="value">3 selected</div>
+          <div
+            class="label"
+            :class="{ active: activeInput === 12 || loadType }"
+          >
+            Load Type
+          </div>
+          <div v-if="loadType" class="value">{{ loadType }}</div>
           <multiselect
-            v-model="workType"
-            :options="workOptions"
-            :multiple="true"
-            :close-on-select="false"
+            v-model="loadType"
+            :options="loadOptions"
+            :multiple="false"
+            :close-on-select="true"
             :searchable="false"
             :show-labels="false"
             placeholder=""
+            @open="activeInput = 12"
+            @close="activeInput = 0"
           />
         </div>
 
         <div class="select-field driver-type">
-          <div class="label active">Driver Type</div>
-          <div class="value">3 selected</div>
+          <div
+            class="label"
+            :class="{ active: activeInput === 13 || driverType }"
+          >
+            Driver Type
+          </div>
+          <div v-if="driverType" class="value">{{ driverType }}</div>
           <multiselect
-            v-model="workType"
-            :options="workOptions"
-            :multiple="true"
-            :close-on-select="false"
+            v-model="driverType"
+            :options="loadOptions"
+            :multiple="false"
+            :close-on-select="true"
             :searchable="false"
             :show-labels="false"
             placeholder=""
+            @open="activeInput = 13"
+            @close="activeInput = 0"
           />
         </div>
 
         <div class="input-field price">
-          <div class="label active">Price/mile (min)</div>
+          <div class="label" :class="{ active: activeInput === 14 || price }">
+            Price/mile (min)
+          </div>
           <b-input-group prepend="$">
-            <b-form-input placeholder=""></b-form-input>
+            <b-form-input
+              v-model="price"
+              placeholder=""
+              @focus="activeInput = 14"
+              @blur="activeInput = 0"
+            ></b-form-input>
           </b-input-group>
         </div>
 
         <div class="input-field payout">
-          <div class="label active">Payout (min)</div>
+          <div class="label" :class="{ active: activeInput === 15 || payout }">
+            Payout (min)
+          </div>
           <b-input-group prepend="$">
-            <b-form-input placeholder=""></b-form-input>
+            <b-form-input
+              v-model="payout"
+              placeholder=""
+              @focus="activeInput = 15"
+              @blur="activeInput = 0"
+            ></b-form-input>
           </b-input-group>
         </div>
 
         <div class="select-field stops">
-          <div class="label active">Stops (max)</div>
-          <div class="value">3 selected</div>
+          <div class="label" :class="{ active: activeInput === 16 || stops }">
+            Stops (max)
+          </div>
+          <div v-if="stops" class="value">{{ stops }}</div>
           <multiselect
-            v-model="workType"
-            :options="workOptions"
-            :multiple="true"
-            :close-on-select="false"
+            v-model="stops"
+            :options="stopOptions"
+            :multiple="false"
+            :close-on-select="true"
             :searchable="false"
             :show-labels="false"
             placeholder=""
+            @open="activeInput = 16"
+            @close="activeInput = 0"
           />
         </div>
 
         <div class="wrapper d-flex">
           <div class="select-field trip-length">
-            <div class="label active">Trip length</div>
-            <div class="value">3 selected</div>
+            <div
+              class="label"
+              :class="{ active: activeInput === 17 || tripLength }"
+            >
+              Trip length
+            </div>
+            <div v-if="tripLength" class="value">{{ tripLength }}</div>
             <multiselect
-              v-model="workType"
-              :options="workOptions"
-              :multiple="true"
-              :close-on-select="false"
+              v-model="tripLength"
+              :options="triOptions"
+              :multiple="false"
+              :close-on-select="true"
               :searchable="false"
               :show-labels="false"
               placeholder=""
+              @open="activeInput = 17"
+              @close="activeInput = 0"
             />
           </div>
 
           <div class="input-field min-hours">
-            <div class="label active">Hours (min.)</div>
+            <div
+              class="label"
+              :class="{ active: activeInput === 18 || minHours }"
+            >
+              Hours (min.)
+            </div>
             <b-input-group>
-              <b-form-input placeholder=""></b-form-input>
+              <b-form-input
+                v-model="minHours"
+                placeholder=""
+                @focus="activeInput = 18"
+                @blur="activeInput = 0"
+              ></b-form-input>
             </b-input-group>
           </div>
 
           <div class="input-field max-hours">
-            <div class="label">Hours (max.)</div>
+            <div
+              class="label"
+              :class="{ active: activeInput === 19 || maxHours }"
+            >
+              Hours (max.)
+            </div>
             <b-input-group>
-              <b-form-input placeholder=""></b-form-input>
+              <b-form-input
+                v-model="maxHours"
+                placeholder=""
+                @focus="activeInput = 19"
+                @blur="activeInput = 0"
+              ></b-form-input>
             </b-input-group>
           </div>
         </div>
@@ -250,14 +384,16 @@
       <div
         class="filters__footer mt-3 d-flex align-items-center justify-content-between"
       >
-        <span class="more-less">
-          <b-icon-chevron-down v-if="true" type="bold"></b-icon-chevron-down>
+        <span class="more-less" @click="isHidden = !isHidden">
+          <b-icon-chevron-down v-if="isHidden"></b-icon-chevron-down>
           <b-icon-chevron-up v-else></b-icon-chevron-up>
-          <span v-if="true">More filters</span>
+          <span v-if="isHidden">More filters</span>
           <span v-else>Hide filters</span>
         </span>
         <span class="early-access">
-          <b-form-checkbox> Show Early Access only </b-form-checkbox>
+          <b-form-checkbox v-model="showEarlyAccess">
+            Show Early Access only
+          </b-form-checkbox>
         </span>
       </div>
     </div>
@@ -295,7 +431,7 @@
                 :step="0.1"
                 :min-value="barMinValue"
                 :max-value="barMaxValue"
-                @input="UpdateValues"
+                @input="updateBar"
               ></multi-range-slider>
               <div class="range-value text-center mt-3">
                 Range: {{ barMinValue + 'X' }} - {{ barMaxValue + 'X' }}
@@ -360,18 +496,61 @@ export default {
   },
   data() {
     return {
-      barMinValue: 0.6,
-      barMaxValue: 1.5,
       workType: [],
-      workOptions: ['Block', 'One-way', 'Round trips'],
+      origin: null,
+      radius: null,
+      destination: null,
+      excludedCities: [],
       startDate: null,
-      startTime: '',
+      startTime: null,
       endDate: null,
       endTime: null,
+      trailerStatus: null,
+      equipment: null,
+      loadType: null,
+      driverType: null,
+      price: null,
+      payout: null,
+      stops: null,
+      tripLength: null,
+      minHours: null,
+      maxHours: null,
+      workOptions: ['Block', 'One-way', 'Round trips'],
+      originOptions: [
+        'Anywhere',
+        'HEBRON, KY',
+        'ROCKFORD, IL',
+        'CHICAGO, IL',
+        'CHANNAHON, IL',
+        'TWINSBURG, OH',
+      ],
+      radiusOptions: [0, 10, 20, 50, 100],
+      trailerOptions: ['Provided', 'Required'],
+      equipmentOptions: [
+        "53' Trailer",
+        "26' Truck",
+        "28' Trailer",
+        "53' Reefer",
+        "26' Reefer",
+        "53' Container",
+        "20' Container",
+        "40' Container",
+        "45' Container",
+        "40' HC Container",
+        "45' HC Container",
+      ],
+      loadOptions: ['Live', 'Drop and hook'],
+      stopOptions: ['Any', '2', '3', '4', '5+'],
+      triOptions: ['Any', '1 day', '2 days', '5 days', '1 week', '1 month'],
+      activeInput: 0,
+      isHidden: true,
+      showEarlyAccess: false,
+      barMinValue: 0.6,
+      barMaxValue: 1.5,
     }
   },
   methods: {
-    UpdateValues(e) {
+    updateBar(e) {
       this.barMinValue = e.minValue
       this.barMaxValue = e.maxValue
     },

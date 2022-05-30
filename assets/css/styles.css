@@ -193,6 +193,11 @@ body {
   row-gap: 16px;
 }
 
+.filters__fields.hidden {
+  height: 48px;
+  overflow-y: hidden;
+}
+
 .filters__fields .work-type {
   width: 200px;
 }
@@ -487,6 +492,10 @@ body {
 /* =========================== ui styles start =========================== */
 .multiselect {
   position: static !important;
+}
+
+.multiselect__single {
+  display: none !important;
 }
 
 .multiselect__tags-wrap {
