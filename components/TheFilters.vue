@@ -82,9 +82,10 @@
 
         <div class="wrapper d-flex">
           <div class="date-field start-date">
+            <div class="label active">Start date</div>
             <b-form-datepicker
               v-model="startDate"
-              placeholder="Start date"
+              placeholder=""
               :date-format-options="{
                 year: 'numeric',
                 month: 'numeric',
@@ -95,9 +96,10 @@
           </div>
 
           <div class="time-field start-time">
+            <div class="label active">Start time</div>
             <b-form-timepicker
               v-model="startTime"
-              placeholder="Start time"
+              placeholder=""
             ></b-form-timepicker>
             <b-icon-clock></b-icon-clock>
           </div>
@@ -105,9 +107,10 @@
 
         <div class="wrapper d-flex">
           <div class="date-field end-date">
+            <div class="label active">End date</div>
             <b-form-datepicker
               v-model="endDate"
-              placeholder="End date"
+              placeholder=""
               :date-format-options="{
                 year: 'numeric',
                 month: 'numeric',
@@ -118,9 +121,10 @@
           </div>
 
           <div class="time-field end-time">
+            <div class="label">Start time</div>
             <b-form-timepicker
               v-model="endTime"
-              placeholder="End time"
+              placeholder=""
             ></b-form-timepicker>
             <b-icon-clock></b-icon-clock>
           </div>
@@ -361,7 +365,7 @@ export default {
       workType: [],
       workOptions: ['Block', 'One-way', 'Round trips'],
       startDate: null,
-      startTime: null,
+      startTime: '',
       endDate: null,
       endTime: null,
     }

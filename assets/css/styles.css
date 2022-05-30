@@ -403,6 +403,87 @@ body {
 
 /* =========================== filters result end =========================== */
 
+/* =========================== board end =========================== */
+.board__list {
+  overflow-x: auto;
+}
+
+.board__item {
+  display: flex;
+  align-items: center;
+  border: 1px solid silver;
+  padding: 8px;
+  border-radius: 6px;
+  min-width: 1520px;
+}
+
+.board__item .selected {
+  background-color: #dff8a7;
+}
+
+.board__head .name {
+  font-size: 15px;
+}
+
+.board__number {
+  width: 20px;
+  height: 20px;
+  color: #fff;
+  background-color: #167795;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.board__from .date,
+.board__to .date {
+  font-size: 15px;
+}
+
+.board__arrow {
+  font-size: 20px;
+}
+
+.board__info .time {
+  font-size: 15px;
+}
+
+.board__requirements .subheading {
+  font-size: 15px;
+}
+
+.board__requirements svg {
+  color: #000;
+}
+
+.board__status {
+  margin-left: 100px;
+  margin-right: 100px;
+}
+
+.board__result .price-per-mile {
+  font-size: 15px;
+}
+
+.board__button button {
+  outline: none !important;
+  border: none !important;
+  color: #fff;
+  width: 140px;
+  border-radius: 5px;
+  background-color: #117b9a;
+  padding: 8px 0;
+}
+
+.board__button button:disabled {
+  pointer-events: none;
+  opacity: 0.6;
+  color: #ccc;
+}
+
+/* =========================== board end =========================== */
+
 /* =========================== ui styles start =========================== */
 .multiselect {
   position: static !important;
@@ -475,19 +556,14 @@ body {
   position: relative;
 }
 
-.date-field .form-control,
-.time-field .form-control,
-.input-field .form-control {
-  height: 40px !important;
-}
-
 .b-form-datepicker,
 .b-form-timepicker {
   border: 1px solid #000 !important;
+  height: 100% !important;
 }
 
-.b-form-datepicker button,
-.b-form-timepicker button {
+.b-form-datepicker > button,
+.b-form-timepicker > button {
   width: 0 !important;
   padding: 0 !important;
   margin: 0 !important;
@@ -499,6 +575,10 @@ body {
 .b-form-timepicker label {
   padding-left: 0.75rem !important;
   padding-right: 44px !important;
+  padding-top: 14px !important;
+  padding-bottom: 0 !important;
+  font-size: 15px !important;
+  color: #000 !important;
 }
 
 .date-field > svg,
@@ -510,6 +590,27 @@ body {
   transform: translateY(-50%);
 }
 
+.date-field .dropdown-menu,
+.time-field .dropdown-menu {
+  z-index: 9999999999999999999999;
+}
+
+.date-field .label,
+.time-field .label {
+  position: absolute;
+  top: 8px;
+  left: 12px;
+  z-index: 9999;
+  transition: 0.3s;
+  pointer-events: none;
+}
+
+.date-field .label.active,
+.time-field .label.active {
+  font-size: 12px;
+  top: 2px;
+}
+
 .input-field .form-control {
   border: 1px solid #000 !important;
   outline: none !important;
@@ -518,6 +619,7 @@ body {
   color: #000;
   padding-bottom: 0 !important;
   padding-top: 14px !important;
+  height: 40px !important;
 }
 
 .input-field .input-group-text {
