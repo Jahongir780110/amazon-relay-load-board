@@ -290,6 +290,12 @@ body {
 
 /* =========================== filters result start =========================== */
 
+.selected-filters {
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 10px;
+}
+
 .selected-filters__tag {
   position: relative;
   padding: 4px 8px;

@@ -408,15 +408,14 @@
         <div class="results__quantity">Showing 1 - 100 of 573 results</div>
 
         <div class="selected-filters mt-3">
-          <span class="selected-filters__tag"
-            >Work type: Block <span class="tag-close">&times;</span></span
+          <span
+            v-for="f in filters"
+            :key="f[0] + f[1]"
+            class="selected-filters__tag"
           >
-          <span class="selected-filters__tag"
-            >Work type: One-way <span class="tag-close">&times;</span></span
-          >
-          <span class="selected-filters__tag"
-            >Work type: Round trips <span class="tag-close">&times;</span></span
-          >
+            {{ f[0] }}: {{ f[1] }}
+            <span class="tag-close" @click="removeFilter(f)">&times;</span>
+          </span>
         </div>
 
         <div class="selected-filters__btns mt-2">
@@ -534,7 +533,7 @@ export default {
         'CHANNAHON, IL',
         'TWINSBURG, OH',
       ],
-      radiusOptions: [0, 10, 20, 50, 100],
+      radiusOptions: ['Any', 10, 20, 50, 100],
       trailerOptions: ['Provided', 'Required'],
       equipmentOptions: [
         "53' Trailer",
@@ -562,7 +561,53 @@ export default {
       isRefreshRange: false,
     }
   },
+  computed: {
+    filters() {
+      const result = []
+      const values = [
+        ['workType', this.workType],
+        ['origin', this.origin],
+        ['radius', this.radius],
+        ['destination', this.destination],
+        ['excludedCities', this.excludedCities],
+        ['startDate', this.startDate],
+        ['startTime', this.startTime],
+        ['endDate', this.endDate],
+        ['endTime', this.endTime],
+        ['trailerStatus', this.trailerStatus],
+        ['equipment', this.equipment],
+        ['loadType', this.loadType],
+        ['driverType', this.driverType],
+        ['price', this.price],
+        ['payout', this.payout],
+        ['stops', this.stops],
+        ['tripLength', this.tripLength],
+        ['minHours', this.minHours],
+        ['maxHours', this.maxHours],
+      ]
+      values.forEach((value) => {
+        if (Array.isArray(value[1])) {
+          value[1].forEach((v) => {
+            result.push([value[0], v])
+          })
+        } else if (value[1]) {
+          result.push([value[0], value[1]])
+        }
+      })
+      return result
+    },
+  },
   methods: {
+    removeFilter(f) {
+      const type = f[0]
+      const value = f[1]
+
+      if (!Array.isArray(this[type])) {
+        this[type] = null
+      } else {
+        this[type] = this[type].filter((v) => v !== value)
+      }
+    },
     updateBar(e) {
       this.barMinValue = e.minValue
       this.barMaxValue = e.maxValue
