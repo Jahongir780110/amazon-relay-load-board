@@ -36,7 +36,9 @@
             <div class="label" :class="{ active: activeInput === 2 || origin }">
               Origin
             </div>
-            <div v-if="origin" class="value">{{ origin }}</div>
+            <div v-if="origin" class="value">
+              {{ origin }}
+            </div>
             <multiselect
               v-model="origin"
               :options="originOptions"
@@ -54,7 +56,9 @@
             <div class="label" :class="{ active: activeInput === 3 || radius }">
               Radius
             </div>
-            <div v-if="radius" class="value">{{ radius }}</div>
+            <div v-if="radius" class="value">
+              {{ radius }}
+            </div>
             <multiselect
               v-model="radius"
               :options="radiusOptions"
@@ -76,7 +80,9 @@
           >
             Destination
           </div>
-          <div v-if="destination" class="value">{{ destination }}</div>
+          <div v-if="destination" class="value">
+            {{ destination }}
+          </div>
           <multiselect
             v-model="destination"
             :options="originOptions"
@@ -131,8 +137,8 @@
               }"
               @shown="activeInput = 6"
               @hidden="activeInput = 0"
-            ></b-form-datepicker>
-            <b-icon-calendar-3></b-icon-calendar-3>
+            />
+            <b-icon-calendar-3 />
           </div>
 
           <div class="time-field start-time">
@@ -147,8 +153,8 @@
               placeholder=""
               @shown="activeInput = 7"
               @hidden="activeInput = 0"
-            ></b-form-timepicker>
-            <b-icon-clock></b-icon-clock>
+            />
+            <b-icon-clock />
           </div>
         </div>
 
@@ -171,8 +177,8 @@
                 }"
                 @shown="activeInput = 8"
                 @hidden="activeInput = 0"
-              ></b-form-datepicker>
-              <b-icon-calendar-3></b-icon-calendar-3>
+              />
+              <b-icon-calendar-3 />
             </div>
 
             <div class="time-field end-time">
@@ -187,8 +193,8 @@
                 placeholder=""
                 @shown="activeInput = 9"
                 @hidden="activeInput = 0"
-              ></b-form-timepicker>
-              <b-icon-clock></b-icon-clock>
+              />
+              <b-icon-clock />
             </div>
           </div>
 
@@ -200,7 +206,9 @@
               >
                 Trailer Status
               </div>
-              <div v-if="trailerStatus" class="value">{{ trailerStatus }}</div>
+              <div v-if="trailerStatus" class="value">
+                {{ trailerStatus }}
+              </div>
               <multiselect
                 v-model="trailerStatus"
                 :options="trailerOptions"
@@ -221,7 +229,9 @@
               >
                 Equipment
               </div>
-              <div v-if="equipment" class="value">{{ equipment }}</div>
+              <div v-if="equipment" class="value">
+                {{ equipment }}
+              </div>
               <multiselect
                 v-model="equipment"
                 :options="equipmentOptions"
@@ -243,7 +253,9 @@
             >
               Load Type
             </div>
-            <div v-if="loadType" class="value">{{ loadType }}</div>
+            <div v-if="loadType" class="value">
+              {{ loadType }}
+            </div>
             <multiselect
               v-model="loadType"
               :options="loadOptions"
@@ -264,7 +276,9 @@
             >
               Driver Type
             </div>
-            <div v-if="driverType" class="value">{{ driverType }}</div>
+            <div v-if="driverType" class="value">
+              {{ driverType }}
+            </div>
             <multiselect
               v-model="driverType"
               :options="loadOptions"
@@ -288,7 +302,7 @@
                 placeholder=""
                 @focus="activeInput = 14"
                 @blur="activeInput = 0"
-              ></b-form-input>
+              />
             </b-input-group>
           </div>
 
@@ -305,15 +319,16 @@
                 placeholder=""
                 @focus="activeInput = 15"
                 @blur="activeInput = 0"
-              ></b-form-input>
+              />
             </b-input-group>
           </div>
-
           <div class="select-field stops">
             <div class="label" :class="{ active: activeInput === 16 || stops }">
               Stops (max)
             </div>
-            <div v-if="stops" class="value">{{ stops }}</div>
+            <div v-if="stops" class="value">
+              {{ stops }}
+            </div>
             <multiselect
               v-model="stops"
               :options="stopOptions"
@@ -335,7 +350,9 @@
               >
                 Trip length
               </div>
-              <div v-if="tripLength" class="value">{{ tripLength }}</div>
+              <div v-if="tripLength" class="value">
+                {{ tripLength }}
+              </div>
               <multiselect
                 v-model="tripLength"
                 :options="triOptions"
@@ -362,7 +379,7 @@
                   placeholder=""
                   @focus="activeInput = 18"
                   @blur="activeInput = 0"
-                ></b-form-input>
+                />
               </b-input-group>
             </div>
 
@@ -379,7 +396,7 @@
                   placeholder=""
                   @focus="activeInput = 19"
                   @blur="activeInput = 0"
-                ></b-form-input>
+                />
               </b-input-group>
             </div>
           </div>
@@ -390,8 +407,8 @@
         class="filters__footer mt-3 d-flex align-items-center justify-content-between"
       >
         <span class="more-less" @click="isHidden = !isHidden">
-          <b-icon-chevron-down v-if="isHidden"></b-icon-chevron-down>
-          <b-icon-chevron-up v-else></b-icon-chevron-up>
+          <b-icon-chevron-down v-if="isHidden" />
+          <b-icon-chevron-up v-else />
           <span v-if="isHidden">More filters</span>
           <span v-else>Hide filters</span>
         </span>
@@ -405,7 +422,9 @@
 
     <div class="filters__result mt-2 d-flex justify-content-between">
       <div class="left flex-fill">
-        <div class="results__quantity">Showing 1 - 100 of 573 results</div>
+        <div class="results__quantity">
+          Showing 1 - 100 of 573 results
+        </div>
 
         <div class="selected-filters mt-3">
           <span
@@ -435,7 +454,7 @@
                 :min-value="barMinValue"
                 :max-value="barMaxValue"
                 @input="updateBar"
-              ></multi-range-slider>
+              />
               <div class="range-value text-center mt-3">
                 Range: {{ barMinValue + 'X' }} - {{ barMaxValue + 'X' }}
               </div>
@@ -460,18 +479,18 @@
       <div class="right">
         <div class="results__controls mt-2">
           <span class="refresh-text mr-n2">Next Refresh 72s</span>
-          <b-icon-arrow-clockwise></b-icon-arrow-clockwise>
-          <b-icon-pause-circle-fill></b-icon-pause-circle-fill>
-          <b-icon-gear></b-icon-gear>
+          <b-icon-arrow-clockwise />
+          <b-icon-pause-circle-fill />
+          <b-icon-gear />
         </div>
         <div
           class="results__date mt-3 d-flex align-items-center justify-content-end"
         >
-          <b-icon-sort-up></b-icon-sort-up>
+          <b-icon-sort-up />
           <span class="ml-1">Start date</span>
         </div>
         <div class="results__play-btn mt-3 text-right">
-          <b-icon-play-fill></b-icon-play-fill>
+          <b-icon-play-fill />
         </div>
       </div>
     </div>
@@ -488,7 +507,7 @@ import {
   BIconSortUp,
   BIconPlayFill,
   BIconCalendar3,
-  BIconClock,
+  BIconClock
 } from 'bootstrap-vue'
 export default {
   name: 'TheFilters',
@@ -501,9 +520,9 @@ export default {
     BIconSortUp,
     BIconPlayFill,
     BIconCalendar3,
-    BIconClock,
+    BIconClock
   },
-  data() {
+  data () {
     return {
       workType: [],
       origin: null,
@@ -531,7 +550,7 @@ export default {
         'ROCKFORD, IL',
         'CHICAGO, IL',
         'CHANNAHON, IL',
-        'TWINSBURG, OH',
+        'TWINSBURG, OH'
       ],
       radiusOptions: ['Any', 10, 20, 50, 100],
       trailerOptions: ['Provided', 'Required'],
@@ -546,7 +565,7 @@ export default {
         "40' Container",
         "45' Container",
         "40' HC Container",
-        "45' HC Container",
+        "45' HC Container"
       ],
       loadOptions: ['Live', 'Drop and hook'],
       stopOptions: ['Any', '2', '3', '4', '5+'],
@@ -558,11 +577,11 @@ export default {
       barMaxValue: 1.5,
       isHighlightedAtTop: false,
       isClickToBook: false,
-      isRefreshRange: false,
+      isRefreshRange: false
     }
   },
   computed: {
-    filters() {
+    filters () {
       const result = []
       const values = [
         ['workType', this.workType],
@@ -583,7 +602,7 @@ export default {
         ['stops', this.stops],
         ['tripLength', this.tripLength],
         ['minHours', this.minHours],
-        ['maxHours', this.maxHours],
+        ['maxHours', this.maxHours]
       ]
       values.forEach((value) => {
         if (Array.isArray(value[1])) {
@@ -595,23 +614,23 @@ export default {
         }
       })
       return result
-    },
+    }
   },
   methods: {
-    removeFilter(f) {
+    removeFilter (f) {
       const type = f[0]
       const value = f[1]
 
       if (!Array.isArray(this[type])) {
         this[type] = null
       } else {
-        this[type] = this[type].filter((v) => v !== value)
+        this[type] = this[type].filter(v => v !== value)
       }
     },
-    updateBar(e) {
+    updateBar (e) {
       this.barMinValue = e.minValue
       this.barMaxValue = e.maxValue
-    },
-  },
+    }
+  }
 }
 </script>
