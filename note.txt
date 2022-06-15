@@ -1,0 +1,2 @@
+loadingType = ['LIVE', 'PRELOADED'] 
+unloadingType  ['DROP', 'LIVE']

@@ -355,7 +355,7 @@
               </div>
               <multiselect
                 v-model="tripLength"
-                :options="triOptions"
+                :options="tripOptions"
                 :multiple="false"
                 :close-on-select="true"
                 :searchable="false"
@@ -509,6 +509,7 @@ import {
   BIconCalendar3,
   BIconClock
 } from 'bootstrap-vue'
+import { mapGetters } from 'vuex'
 export default {
   name: 'TheFilters',
   components: {
@@ -543,7 +544,8 @@ export default {
       tripLength: null,
       minHours: null,
       maxHours: null,
-      workOptions: ['Block', 'One-way', 'Round trips'],
+
+      workOptions: ['Block', 'One-way', 'Round trips'], // -
       originOptions: [
         'Anywhere',
         'HEBRON, KY',
@@ -569,18 +571,22 @@ export default {
       ],
       loadOptions: ['Live', 'Drop and hook'],
       stopOptions: ['Any', '2', '3', '4', '5+'],
-      triOptions: ['Any', '1 day', '2 days', '5 days', '1 week', '1 month'],
-      activeInput: 0,
-      isHidden: true,
-      showEarlyAccess: false,
-      barMinValue: 0.6,
-      barMaxValue: 1.5,
-      isHighlightedAtTop: false,
-      isClickToBook: false,
-      isRefreshRange: false
+      tripOptions: ['Any', '1 day', '2 days', '5 days', '1 week', '1 month'],
+
+      activeInput: 0, // -
+      isHidden: true, // -
+      showEarlyAccess: false, // -
+      barMinValue: 0.6, // -
+      barMaxValue: 1.5, // -
+      isHighlightedAtTop: false, // -
+      isClickToBook: false, // -
+      isRefreshRange: false // -
     }
   },
   computed: {
+    ...mapGetters({
+      getData: 'getData'
+    }),
     filters () {
       const result = []
       const values = [
