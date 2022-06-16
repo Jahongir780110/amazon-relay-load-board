@@ -20,7 +20,7 @@
           </div>
           <multiselect
             v-model="workType"
-            :options="workOptions"
+            :options="workOpportunities"
             :multiple="true"
             :close-on-select="false"
             :searchable="false"
@@ -281,7 +281,7 @@
             </div>
             <multiselect
               v-model="driverType"
-              :options="loadOptions"
+              :options="driverOptions"
               :multiple="false"
               :close-on-select="true"
               :searchable="false"
@@ -525,6 +525,7 @@ export default {
   },
   data () {
     return {
+      allData: [],
       workType: [],
       origin: null,
       radius: null,
@@ -545,7 +546,8 @@ export default {
       minHours: null,
       maxHours: null,
 
-      workOptions: ['Block', 'One-way', 'Round trips'], // -
+      driverOptions: ['Solo', 'Team'],
+      workOpportunities: ['Block', 'One-way', 'Round trips'], // -
       originOptions: [
         'Anywhere',
         'HEBRON, KY',
@@ -622,11 +624,26 @@ export default {
       return result
     }
   },
+  watch: {
+    filters (filterVals) {
+      const result = []
+      filterVals.forEach((val) => {
+        this.allData.forEach((d) => {
+          if (d[val[0]] === val[1]) {
+            result.push(d)
+          }
+        })
+      })
+      console.log('result', result)
+    }
+  },
+  mounted () {
+    this.allData = this.getData
+  },
   methods: {
     removeFilter (f) {
       const type = f[0]
       const value = f[1]
-
       if (!Array.isArray(this[type])) {
         this[type] = null
       } else {
