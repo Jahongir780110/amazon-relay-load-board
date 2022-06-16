@@ -322,6 +322,7 @@
               />
             </b-input-group>
           </div>
+
           <div class="select-field stops">
             <div class="label" :class="{ active: activeInput === 16 || stops }">
               Stops (max)
@@ -412,6 +413,7 @@
           <span v-if="isHidden">More filters</span>
           <span v-else>Hide filters</span>
         </span>
+
         <span class="early-access">
           <b-form-checkbox v-model="showEarlyAccess">
             Show Early Access only
@@ -422,13 +424,11 @@
 
     <div class="filters__result mt-2 d-flex justify-content-between">
       <div class="left flex-fill">
-        <div class="results__quantity">
-          Showing 1 - 100 of 573 results
-        </div>
+        <div class="results__quantity">Showing 1 - 100 of 573 results</div>
 
         <div class="selected-filters mt-3">
           <span
-            v-for="f in filters"
+            v-for="f in filtersArray"
             :key="f[0] + f[1]"
             class="selected-filters__tag"
           >
@@ -460,6 +460,7 @@
               </div>
             </div>
           </client-only>
+
           <div class="checkboxes">
             <b-form-checkbox v-model="isHighlightedAtTop">
               Highlighted at the top
@@ -468,6 +469,7 @@
               Click-to-book
             </b-form-checkbox>
           </div>
+
           <div class="checkboxes">
             <b-form-checkbox v-model="isRefreshRange">
               Refresh Range
@@ -483,12 +485,14 @@
           <b-icon-pause-circle-fill />
           <b-icon-gear />
         </div>
+
         <div
           class="results__date mt-3 d-flex align-items-center justify-content-end"
         >
           <b-icon-sort-up />
           <span class="ml-1">Start date</span>
         </div>
+
         <div class="results__play-btn mt-3 text-right">
           <b-icon-play-fill />
         </div>
@@ -498,6 +502,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import {
   BIconChevronUp,
   BIconChevronDown,
@@ -507,9 +512,9 @@ import {
   BIconSortUp,
   BIconPlayFill,
   BIconCalendar3,
-  BIconClock
+  BIconClock,
 } from 'bootstrap-vue'
-import { mapGetters } from 'vuex'
+
 export default {
   name: 'TheFilters',
   components: {
@@ -521,11 +526,10 @@ export default {
     BIconSortUp,
     BIconPlayFill,
     BIconCalendar3,
-    BIconClock
+    BIconClock,
   },
-  data () {
+  data() {
     return {
-      allData: [],
       workType: [],
       origin: null,
       radius: null,
@@ -546,15 +550,15 @@ export default {
       minHours: null,
       maxHours: null,
 
-      driverOptions: ['Solo', 'Team'],
-      workOpportunities: ['Block', 'One-way', 'Round trips'], // -
+      allData: [],
+      workOpportunities: ['Block', 'One-way', 'Round trips'],
       originOptions: [
         'Anywhere',
         'HEBRON, KY',
         'ROCKFORD, IL',
         'CHICAGO, IL',
         'CHANNAHON, IL',
-        'TWINSBURG, OH'
+        'TWINSBURG, OH',
       ],
       radiusOptions: ['Any', 10, 20, 50, 100],
       trailerOptions: ['Provided', 'Required'],
@@ -569,28 +573,29 @@ export default {
         "40' Container",
         "45' Container",
         "40' HC Container",
-        "45' HC Container"
+        "45' HC Container",
       ],
       loadOptions: ['Live', 'Drop and hook'],
+      driverOptions: ['Solo', 'Team'],
       stopOptions: ['Any', '2', '3', '4', '5+'],
       tripOptions: ['Any', '1 day', '2 days', '5 days', '1 week', '1 month'],
 
-      activeInput: 0, // -
-      isHidden: true, // -
-      showEarlyAccess: false, // -
-      barMinValue: 0.6, // -
-      barMaxValue: 1.5, // -
-      isHighlightedAtTop: false, // -
-      isClickToBook: false, // -
-      isRefreshRange: false // -
+      activeInput: 0,
+      isHidden: true,
+      showEarlyAccess: false,
+      barMinValue: 0.6,
+      barMaxValue: 1.5,
+      isHighlightedAtTop: false,
+      isClickToBook: false,
+      isRefreshRange: false,
     }
   },
   computed: {
     ...mapGetters({
-      getData: 'getData'
+      getData: 'getData',
     }),
-    filters () {
-      const result = []
+    filtersObject() {
+      const result = {}
       const values = [
         ['workType', this.workType],
         ['origin', this.origin],
@@ -610,50 +615,59 @@ export default {
         ['stops', this.stops],
         ['tripLength', this.tripLength],
         ['minHours', this.minHours],
-        ['maxHours', this.maxHours]
+        ['maxHours', this.maxHours],
       ]
-      values.forEach((value) => {
-        if (Array.isArray(value[1])) {
-          value[1].forEach((v) => {
-            result.push([value[0], v])
-          })
-        } else if (value[1]) {
-          result.push([value[0], value[1]])
+      values.forEach((val) => {
+        if (
+          (Array.isArray(val[1]) && val[1].length) ||
+          (!Array.isArray(val[1]) && val[1])
+        ) {
+          result[val[0]] = val[1]
         }
       })
       return result
-    }
+    },
+    filtersArray() {
+      const result = []
+      const filters = this.filtersObject
+
+      for (const el in filters) {
+        if (!Array.isArray(filters[el])) {
+          result.push([el, filters[el]])
+        } else if (Array.isArray(filters[el])) {
+          filters[el].forEach((val) => {
+            result.push([el, val])
+          })
+        }
+      }
+      return result
+    },
   },
   watch: {
-    filters (filterVals) {
-      const result = []
-      filterVals.forEach((val) => {
-        this.allData.forEach((d) => {
-          if (d[val[0]] === val[1]) {
-            result.push(d)
-          }
-        })
-      })
-      console.log('result', result)
-    }
+    filtersObject(val) {
+      console.log('obj', val)
+    },
+    filtersArray(val) {
+      console.log('array', val)
+    },
   },
-  mounted () {
+  mounted() {
     this.allData = this.getData
   },
   methods: {
-    removeFilter (f) {
+    removeFilter(f) {
       const type = f[0]
       const value = f[1]
       if (!Array.isArray(this[type])) {
         this[type] = null
       } else {
-        this[type] = this[type].filter(v => v !== value)
+        this[type] = this[type].filter((v) => v !== value)
       }
     },
-    updateBar (e) {
+    updateBar(e) {
       this.barMinValue = e.minValue
       this.barMaxValue = e.maxValue
-    }
-  }
+    },
+  },
 }
 </script>
