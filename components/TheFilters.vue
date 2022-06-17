@@ -79,18 +79,18 @@
         <div class="select-field destination">
           <div
             class="label"
-            :class="{ active: activeInput === 4 || destination }"
+            :class="{ active: activeInput === 4 || destination.length > 0 }"
           >
             Destination
           </div>
-          <div v-if="destination" class="value">
-            {{ destination }}
+          <div v-if="destination.length > 0" class="value">
+            {{ destination.length }} selected
           </div>
           <multiselect
             v-model="destination"
-            :options="originOptions"
-            :multiple="false"
-            :close-on-select="true"
+            :options="destinationOptions"
+            :multiple="true"
+            :close-on-select="false"
             :searchable="false"
             :show-labels="false"
             placeholder=""
@@ -111,7 +111,7 @@
           </div>
           <multiselect
             v-model="excludedCities"
-            :options="originOptions.slice(1)"
+            :options="excludedCitiesOptions"
             :multiple="true"
             :close-on-select="false"
             :searchable="false"
@@ -536,7 +536,7 @@ export default {
       workType: [],
       origin: [],
       radius: null,
-      destination: null,
+      destination: [],
       excludedCities: [],
       startDate: null,
       startTime: null,
@@ -556,7 +556,9 @@ export default {
       allData: [],
       workOpportunities: ['Block', 'One-way', 'Round-trips'],
       originOptions: [],
+      destinationOptions: [],
       radiusOptions: ['Any', 10, 20, 50, 100],
+      excludedCitiesOptions: [],
       trailerOptions: ['Provided', 'Required'],
       equipmentOptions: [
         "53' Trailer",
@@ -647,12 +649,11 @@ export default {
   mounted() {
     this.allData = this.getData
     this.fillOriginOptions()
+    this.fillDestinationOptions()
+    this.fillExcludedCities()
   },
   methods: {
     ...mapActions({
-      workTypeAction: 'filterWorkType',
-      originAction: 'filterOriginAction',
-      fillData: 'fillData',
       bigDaddy: 'bigDaddy',
     }),
     removeFilter(f) {
@@ -675,11 +676,22 @@ export default {
       })
       this.originOptions = ['Anywhere', ...originOptionsSet]
     },
-    filterWorkType(filterVals) {
-      this.workTypeAction(filterVals)
+    fillDestinationOptions() {
+      const destinationOptionsSet = new Set()
+      this.getData.forEach((el) => {
+        destinationOptionsSet.add(
+          `${el.destination.city}, ${el.destination.state}`
+        )
+      })
+      this.destinationOptions = ['Anywhere', ...destinationOptionsSet]
     },
-    filterOrigin(filterVals) {
-      this.originAction(filterVals)
+    fillExcludedCities() {
+      const excludedCitiesSet = new Set()
+      this.getData.forEach((el) => {
+        excludedCitiesSet.add(el.origin.city)
+        excludedCitiesSet.add(el.destination.city)
+      })
+      this.excludedCitiesOptions = [...excludedCitiesSet]
     },
   },
 }

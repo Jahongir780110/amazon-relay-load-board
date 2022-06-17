@@ -30,19 +30,25 @@ export const actions = {
       const filter = filters[key]
 
       if (Array.isArray(filter)) {
-        const tempResult = []
+        let tempResult = []
+        const tempSet = new Set()
         for (const filVal of filter) {
           const a = await dispatch([key] + 'Action', filVal)
-          tempResult.push(...a)
+          if (a.isExcludedCities) {
+            tempResult = [...intersection(tempResult, a.data)]
+          } else {
+            tempResult.push(...a)
+          }
         }
-        result = intersection(result, tempResult)
+        tempResult.forEach((item) => tempSet.add(item))
+        result = intersection(result, [...tempSet])
       } else {
         const a = await dispatch([key] + 'Action', filter)
         result = intersection(result, a)
       }
     }
 
-    console.log('result', result)
+    commit('setFilteredData', result)
   },
   workTypeAction({ state }, val) {
     console.log('val', val)
@@ -53,6 +59,133 @@ export const actions = {
         set.add(data)
       }
     })
+    return [...set]
+  },
+  originAction({ state }, val) {
+    console.log('val', val)
+    const bigData = state.data
+    const set = new Set()
+
+    if (val === 'Anywhere') {
+      return bigData
+    }
+    bigData.forEach((data) => {
+      if (data.origin.city + ', ' + data.origin.state === val) {
+        set.add(data)
+      }
+    })
+    console.log('originResult', set)
+    return [...set]
+  },
+  radiusAction({ state }, val) {
+    console.log('val', val)
+    const bigData = state.data
+    const set = new Set()
+
+    if (val === 'Any') {
+      return bigData
+    }
+    bigData.forEach((data) => {
+      if (Number(data.radius) <= Number(val)) {
+        set.add(data)
+      }
+    })
+    console.log('radiusResult', set)
+    return [...set]
+  },
+  destinationAction({ state }, val) {
+    console.log('val', val)
+    const bigData = state.data
+    const set = new Set()
+
+    if (val === 'Anywhere') {
+      return bigData
+    }
+    bigData.forEach((data) => {
+      if (data.destination.city + ', ' + data.destination.state === val) {
+        set.add(data)
+      }
+    })
+    console.log('destinationResult', set)
+    return [...set]
+  },
+  excludedCitiesAction({ state }, val) {
+    console.log('val', val)
+    const bigData = state.data
+    const set = new Set()
+
+    if (val === 'Anywhere') {
+      return bigData
+    }
+    bigData.forEach((data) => {
+      if (data.origin.city !== val && data.destination.city !== val) {
+        set.add(data)
+      }
+    })
+    console.log('excludedCitiesResult', set)
+    return {
+      data: [...set],
+      isExcludedCities: true,
+    }
+  },
+  startDateAction({ state }, val) {
+    console.log('val', val) // 2022-06-08
+    const bigData = state.data
+    const set = new Set()
+    bigData.forEach((data) => {
+      console.log(
+        "data.firstPickupTime.split('T')[0])",
+        data.firstPickupTime.split('T')[0]
+      )
+      if (new Date(data.firstPickupTime.split('T')[0]) >= new Date(val)) {
+        set.add(data)
+      }
+    })
+
+    console.log('startDateResult', set)
+    return [...set]
+  },
+  startTimeAction({ state }, val) {
+    console.log('val', val) // 04:01:00
+    const bigData = state.data
+    const set = new Set()
+    bigData.forEach((data) => {
+      console.log(
+        "data.firstPickupTime.split('T')[1].slice(0, -1)",
+        data.firstPickupTime.split('T')[1].slice(0, -1)
+      )
+      if (data.firstPickupTime.split('T')[1].slice(0, -1) >= val) {
+        set.add(data)
+      }
+    })
+
+    console.log('startTimeResult', set)
+    return [...set]
+  },
+  endDateAction({ state }, val) {
+    console.log('val', val) // 2022-06-08
+    const bigData = state.data
+    const set = new Set()
+    bigData.forEach((data) => {
+      if (new Date(data.firstPickupTime.split('T')[0]) <= new Date(val)) {
+        set.add(data)
+      }
+    })
+
+    console.log('endDateResult', set)
+    return [...set]
+  },
+  endTimeAction({ state }, val) {
+    console.log('val', val) // 04:01:00
+    const bigData = state.data
+    const set = new Set()
+    bigData.forEach((data) => {
+      if (data.firstPickupTime.split('T')[1].slice(0, -1) <= val) {
+        set.add(data)
+      }
+    })
+
+    console.log('endTimeResult', set)
     return [...set]
   },
   trailerStatusAction({ state }, val) {
@@ -79,6 +212,23 @@ export const actions = {
     console.log('equipmentResult', set)
     return [...set]
   },
+  loadTypeAction({ state }, val) {
+    console.log('val', val) // Live, Drop and hook
+    // loadingType = ['LIVE', 'PRELOADED']
+    // unloadingType  ['DROP', 'LIVE']
+    const bigData = state.data
+    const set = new Set()
+    bigData.forEach((data) => {
+      if (
+        (val === 'Live' && data.loadType === 'LIVE') ||
+        (val === 'Drop and hook' && data.loadType !== 'LIVE')
+      ) {
+        set.add(data)
+      }
+    })
+    console.log('loadTypeResult', set)
+    return [...set]
+  },
   driverTypeAction({ state }, val) {
     console.log('val', val)
     const bigData = state.data
@@ -89,6 +239,111 @@ export const actions = {
       }
     })
     console.log('equipmentResult', set)
+    return [...set]
+  },
+  priceAction({ state }, val) {
+    console.log('val', val)
+    const bigData = state.data
+    const set = new Set()
+
+    bigData.forEach((data) => {
+      if (Number(data.payout.value / data.totalDistance.value) >= Number(val)) {
+        set.add(data)
+      }
+    })
+    console.log('priceResult', set)
+    return [...set]
+  },
+  payoutAction({ state }, val) {
+    console.log('val', val)
+    const bigData = state.data
+    const set = new Set()
+
+    bigData.forEach((data) => {
+      if (Number(data.payout.value) >= Number(val)) {
+        set.add(data)
+      }
+    })
+    console.log('payoutResult', set)
+    return [...set]
+  },
+  stopsAction({ state }, val) {
+    console.log('val', val)
+    const bigData = state.data
+    const set = new Set()
+
+    if (val === 'Any') {
+      return bigData
+    } else if (val === '5+') {
+      bigData.forEach((data) => {
+        if (Number(data.stops) >= 5) {
+          set.add(data)
+        }
+      })
+    } else {
+      bigData.forEach((data) => {
+        if (Number(data.stops) === Number(val)) {
+          set.add(data)
+        }
+      })
+    }
+    console.log('stopsResult', set)
+    return [...set]
+  },
+  tripLengthAction({ state }, val) {
+    console.log('val', val)
+    const bigData = state.data
+    const set = new Set()
+    if (val === 'Any') {
+      return bigData
+    }
+    switch (val) {
+      case '1 day':
+        val = 1000 * 60 * 60 * 24
+        break
+      case '2 days':
+        val = 1000 * 60 * 60 * 24 * 2
+        break
+      case '5 days':
+        val = 1000 * 60 * 60 * 24 * 5
+        break
+      case '1 week':
+        val = 1000 * 60 * 60 * 24 * 7
+        break
+      case '1 month':
+        val = 1000 * 60 * 60 * 24 * 30
+        break
+    }
+    bigData.forEach((data) => {
+      if (Number(data.totalDuration) <= val) {
+        set.add(data)
+      }
+    })
+    console.log('tripLengthResult', set)
+    return [...set]
+  },
+  minHoursAction({ state }, val) {
+    console.log('val', val)
+    const bigData = state.data
+    const set = new Set()
+    bigData.forEach((data) => {
+      if (Number(data.totalDuration) >= Number(val) * 60 * 60 * 1000) {
+        set.add(data)
+      }
+    })
+    console.log('minHoursResult', set)
+    return [...set]
+  },
+  maxHoursAction({ state }, val) {
+    console.log('val', val)
+    const bigData = state.data
+    const set = new Set()
+    bigData.forEach((data) => {
+      if (Number(data.totalDuration) <= Number(val) * 60 * 60 * 1000) {
+        set.add(data)
+      }
+    })
+    console.log('maxHoursResult', set)
     return [...set]
   },
 }
