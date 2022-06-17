@@ -33,11 +33,14 @@
 
         <div class="wrapper d-flex">
           <div class="select-field origin">
-            <div class="label" :class="{ active: activeInput === 2 || origin }">
+            <div
+              class="label"
+              :class="{ active: activeInput === 2 || origin.length > 0 }"
+            >
               Origin
             </div>
-            <div v-if="origin" class="value">
-              {{ origin }}
+            <div v-if="origin.length > 0" class="value">
+              {{ origin.length }} selected
             </div>
             <multiselect
               v-model="origin"
@@ -611,9 +614,6 @@ export default {
       ]
       const result = {}
       values.forEach((val) => {
-        // filterArray.push({
-        //   [val[0]]: val[1],
-        // })
         if (
           (Array.isArray(val[1]) && val[1].length) ||
           (!Array.isArray(val[1]) && val[1])
@@ -622,7 +622,6 @@ export default {
         }
       })
       return result
-      // return result
     },
     filtersArray() {
       const result = []
