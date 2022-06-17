@@ -710,3 +710,12 @@ body {
   font-size: 12px;
   top: 2px;
 }
+
+.custom-control-input:checked ~ .custom-control-label::before {
+  border-color: #1d8b96;
+  background-color: #1d8b96;
+}
+
+.custom-control-input:focus ~ .custom-control-label::before {
+  box-shadow: 0 0 0 0.2rem rgb(29 139 150 / 25%);
+}
