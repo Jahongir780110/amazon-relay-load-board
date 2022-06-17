@@ -20,7 +20,7 @@
           </div>
           <multiselect
             v-model="workType"
-            :options="workOptions"
+            :options="workOpportunities"
             :multiple="true"
             :close-on-select="false"
             :searchable="false"
@@ -42,8 +42,8 @@
             <multiselect
               v-model="origin"
               :options="originOptions"
-              :multiple="false"
-              :close-on-select="true"
+              :multiple="true"
+              :close-on-select="false"
               :searchable="false"
               :show-labels="false"
               placeholder=""
@@ -281,7 +281,7 @@
             </div>
             <multiselect
               v-model="driverType"
-              :options="loadOptions"
+              :options="driverOptions"
               :multiple="false"
               :close-on-select="true"
               :searchable="false"
@@ -322,6 +322,7 @@
               />
             </b-input-group>
           </div>
+
           <div class="select-field stops">
             <div class="label" :class="{ active: activeInput === 16 || stops }">
               Stops (max)
@@ -355,7 +356,7 @@
               </div>
               <multiselect
                 v-model="tripLength"
-                :options="triOptions"
+                :options="tripOptions"
                 :multiple="false"
                 :close-on-select="true"
                 :searchable="false"
@@ -412,6 +413,7 @@
           <span v-if="isHidden">More filters</span>
           <span v-else>Hide filters</span>
         </span>
+
         <span class="early-access">
           <b-form-checkbox v-model="showEarlyAccess">
             Show Early Access only
@@ -422,13 +424,11 @@
 
     <div class="filters__result mt-2 d-flex justify-content-between">
       <div class="left flex-fill">
-        <div class="results__quantity">
-          Showing 1 - 100 of 573 results
-        </div>
+        <div class="results__quantity">Showing 1 - 100 of 573 results</div>
 
         <div class="selected-filters mt-3">
           <span
-            v-for="f in filters"
+            v-for="f in filtersArray"
             :key="f[0] + f[1]"
             class="selected-filters__tag"
           >
@@ -460,6 +460,7 @@
               </div>
             </div>
           </client-only>
+
           <div class="checkboxes">
             <b-form-checkbox v-model="isHighlightedAtTop">
               Highlighted at the top
@@ -468,6 +469,7 @@
               Click-to-book
             </b-form-checkbox>
           </div>
+
           <div class="checkboxes">
             <b-form-checkbox v-model="isRefreshRange">
               Refresh Range
@@ -483,12 +485,14 @@
           <b-icon-pause-circle-fill />
           <b-icon-gear />
         </div>
+
         <div
           class="results__date mt-3 d-flex align-items-center justify-content-end"
         >
           <b-icon-sort-up />
           <span class="ml-1">Start date</span>
         </div>
+
         <div class="results__play-btn mt-3 text-right">
           <b-icon-play-fill />
         </div>
@@ -498,6 +502,7 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
 import {
   BIconChevronUp,
   BIconChevronDown,
@@ -507,8 +512,9 @@ import {
   BIconSortUp,
   BIconPlayFill,
   BIconCalendar3,
-  BIconClock
+  BIconClock,
 } from 'bootstrap-vue'
+
 export default {
   name: 'TheFilters',
   components: {
@@ -520,12 +526,12 @@ export default {
     BIconSortUp,
     BIconPlayFill,
     BIconCalendar3,
-    BIconClock
+    BIconClock,
   },
-  data () {
+  data() {
     return {
       workType: [],
-      origin: null,
+      origin: [],
       radius: null,
       destination: null,
       excludedCities: [],
@@ -543,15 +549,10 @@ export default {
       tripLength: null,
       minHours: null,
       maxHours: null,
-      workOptions: ['Block', 'One-way', 'Round trips'],
-      originOptions: [
-        'Anywhere',
-        'HEBRON, KY',
-        'ROCKFORD, IL',
-        'CHICAGO, IL',
-        'CHANNAHON, IL',
-        'TWINSBURG, OH'
-      ],
+
+      allData: [],
+      workOpportunities: ['Block', 'One-way', 'Round-trips'],
+      originOptions: [],
       radiusOptions: ['Any', 10, 20, 50, 100],
       trailerOptions: ['Provided', 'Required'],
       equipmentOptions: [
@@ -565,11 +566,13 @@ export default {
         "40' Container",
         "45' Container",
         "40' HC Container",
-        "45' HC Container"
+        "45' HC Container",
       ],
       loadOptions: ['Live', 'Drop and hook'],
+      driverOptions: ['Solo', 'Team'],
       stopOptions: ['Any', '2', '3', '4', '5+'],
-      triOptions: ['Any', '1 day', '2 days', '5 days', '1 week', '1 month'],
+      tripOptions: ['Any', '1 day', '2 days', '5 days', '1 week', '1 month'],
+
       activeInput: 0,
       isHidden: true,
       showEarlyAccess: false,
@@ -577,12 +580,14 @@ export default {
       barMaxValue: 1.5,
       isHighlightedAtTop: false,
       isClickToBook: false,
-      isRefreshRange: false
+      isRefreshRange: false,
     }
   },
   computed: {
-    filters () {
-      const result = []
+    ...mapGetters({
+      getData: 'getData',
+    }),
+    filtersObject() {
       const values = [
         ['workType', this.workType],
         ['origin', this.origin],
@@ -602,35 +607,81 @@ export default {
         ['stops', this.stops],
         ['tripLength', this.tripLength],
         ['minHours', this.minHours],
-        ['maxHours', this.maxHours]
+        ['maxHours', this.maxHours],
       ]
-      values.forEach((value) => {
-        if (Array.isArray(value[1])) {
-          value[1].forEach((v) => {
-            result.push([value[0], v])
-          })
-        } else if (value[1]) {
-          result.push([value[0], value[1]])
+      const result = {}
+      values.forEach((val) => {
+        // filterArray.push({
+        //   [val[0]]: val[1],
+        // })
+        if (
+          (Array.isArray(val[1]) && val[1].length) ||
+          (!Array.isArray(val[1]) && val[1])
+        ) {
+          result[val[0]] = val[1]
         }
       })
       return result
-    }
+      // return result
+    },
+    filtersArray() {
+      const result = []
+      const filters = this.filtersObject
+
+      for (const el in filters) {
+        if (!Array.isArray(filters[el])) {
+          result.push([el, filters[el]])
+        } else if (Array.isArray(filters[el])) {
+          filters[el].forEach((val) => {
+            result.push([el, val])
+          })
+        }
+      }
+      return result
+    },
+  },
+  watch: {
+    filtersObject(val) {
+      this.bigDaddy(val)
+    },
+  },
+  mounted() {
+    this.allData = this.getData
+    this.fillOriginOptions()
   },
   methods: {
-    removeFilter (f) {
+    ...mapActions({
+      workTypeAction: 'filterWorkType',
+      originAction: 'filterOriginAction',
+      fillData: 'fillData',
+      bigDaddy: 'bigDaddy',
+    }),
+    removeFilter(f) {
       const type = f[0]
       const value = f[1]
-
       if (!Array.isArray(this[type])) {
         this[type] = null
       } else {
-        this[type] = this[type].filter(v => v !== value)
+        this[type] = this[type].filter((v) => v !== value)
       }
     },
-    updateBar (e) {
+    updateBar(e) {
       this.barMinValue = e.minValue
       this.barMaxValue = e.maxValue
-    }
-  }
+    },
+    fillOriginOptions() {
+      const originOptionsSet = new Set()
+      this.getData.forEach((el) => {
+        originOptionsSet.add(`${el.origin.city}, ${el.origin.state}`)
+      })
+      this.originOptions = ['Anywhere', ...originOptionsSet]
+    },
+    filterWorkType(filterVals) {
+      this.workTypeAction(filterVals)
+    },
+    filterOrigin(filterVals) {
+      this.originAction(filterVals)
+    },
+  },
 }
 </script>

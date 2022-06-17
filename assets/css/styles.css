@@ -438,6 +438,10 @@ body {
   background-color: #dff8a7;
 }
 
+.board__head {
+  width: 80px;
+}
+
 .board__head .name {
   font-size: 15px;
 }
@@ -453,6 +457,17 @@ body {
   justify-content: center;
 }
 
+.board__from {
+  width: 220px;
+}
+
+.board__from .location {
+  width: 240px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .board__from .date,
 .board__to .date {
   font-size: 15px;
@@ -462,8 +477,42 @@ body {
   font-size: 20px;
 }
 
+.board__arrow svg:nth-child(2) {
+  margin-left: -10px;
+}
+
+.board__to {
+  width: 220px;
+}
+
+.board__to .location {
+  width: 240px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.board__info {
+  width: 70px;
+  text-align: right;
+}
+
 .board__info .time {
   font-size: 15px;
+}
+
+.board__icons {
+  width: 120px;
+  text-align: center;
+}
+
+.board__icons svg:nth-child(2) {
+  margin-left: -4px;
+}
+
+.board__requirements {
+  width: 100px;
+  text-align: right;
 }
 
 .board__requirements .subheading {
@@ -475,8 +524,8 @@ body {
 }
 
 .board__status {
-  margin-left: 100px;
-  margin-right: 100px;
+  width: 240px;
+  text-align: center;
 }
 
 .board__result .price-per-mile {
@@ -660,4 +709,13 @@ body {
 .input-field .label.active {
   font-size: 12px;
   top: 2px;
+}
+
+.custom-control-input:checked ~ .custom-control-label::before {
+  border-color: #1d8b96;
+  background-color: #1d8b96;
+}
+
+.custom-control-input:focus ~ .custom-control-label::before {
+  box-shadow: 0 0 0 0.2rem rgb(29 139 150 / 25%);
 }

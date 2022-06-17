@@ -5,8 +5,8 @@
       <li class="main__tabs-tab active">Search</li>
       <li class="main__tabs-tab">Post A Truck</li>
     </ul>
-    <the-filters></the-filters>
-    <the-board></the-board>
+    <the-filters />
+    <the-board />
   </main>
 </template>
 
