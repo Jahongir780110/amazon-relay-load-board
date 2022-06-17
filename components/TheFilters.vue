@@ -42,8 +42,8 @@
             <multiselect
               v-model="origin"
               :options="originOptions"
-              :multiple="false"
-              :close-on-select="true"
+              :multiple="true"
+              :close-on-select="false"
               :searchable="false"
               :show-labels="false"
               placeholder=""
@@ -502,7 +502,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import {
   BIconChevronUp,
   BIconChevronDown,
@@ -531,7 +531,7 @@ export default {
   data() {
     return {
       workType: [],
-      origin: null,
+      origin: [],
       radius: null,
       destination: null,
       excludedCities: [],
@@ -551,15 +551,8 @@ export default {
       maxHours: null,
 
       allData: [],
-      workOpportunities: ['Block', 'One-way', 'Round trips'],
-      originOptions: [
-        'Anywhere',
-        'HEBRON, KY',
-        'ROCKFORD, IL',
-        'CHICAGO, IL',
-        'CHANNAHON, IL',
-        'TWINSBURG, OH',
-      ],
+      workOpportunities: ['Block', 'One-way', 'Round-trips'],
+      originOptions: [],
       radiusOptions: ['Any', 10, 20, 50, 100],
       trailerOptions: ['Provided', 'Required'],
       equipmentOptions: [
@@ -595,7 +588,6 @@ export default {
       getData: 'getData',
     }),
     filtersObject() {
-      const result = {}
       const values = [
         ['workType', this.workType],
         ['origin', this.origin],
@@ -617,7 +609,11 @@ export default {
         ['minHours', this.minHours],
         ['maxHours', this.maxHours],
       ]
+      const result = {}
       values.forEach((val) => {
+        // filterArray.push({
+        //   [val[0]]: val[1],
+        // })
         if (
           (Array.isArray(val[1]) && val[1].length) ||
           (!Array.isArray(val[1]) && val[1])
@@ -626,6 +622,7 @@ export default {
         }
       })
       return result
+      // return result
     },
     filtersArray() {
       const result = []
@@ -645,16 +642,20 @@ export default {
   },
   watch: {
     filtersObject(val) {
-      console.log('obj', val)
-    },
-    filtersArray(val) {
-      console.log('array', val)
+      this.bigDaddy(val)
     },
   },
   mounted() {
     this.allData = this.getData
+    this.fillOriginOptions()
   },
   methods: {
+    ...mapActions({
+      workTypeAction: 'filterWorkType',
+      originAction: 'filterOriginAction',
+      fillData: 'fillData',
+      bigDaddy: 'bigDaddy',
+    }),
     removeFilter(f) {
       const type = f[0]
       const value = f[1]
@@ -667,6 +668,19 @@ export default {
     updateBar(e) {
       this.barMinValue = e.minValue
       this.barMaxValue = e.maxValue
+    },
+    fillOriginOptions() {
+      const originOptionsSet = new Set()
+      this.getData.forEach((el) => {
+        originOptionsSet.add(`${el.origin.city}, ${el.origin.state}`)
+      })
+      this.originOptions = ['Anywhere', ...originOptionsSet]
+    },
+    filterWorkType(filterVals) {
+      this.workTypeAction(filterVals)
+    },
+    filterOrigin(filterVals) {
+      this.originAction(filterVals)
     },
   },
 }

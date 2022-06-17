@@ -4,7 +4,7 @@
 
     <div class="board__list mt-3">
       <div
-        v-for="(data, index) in getData"
+        v-for="(data, index) in getFilteredData"
         :key="index"
         class="board__item mb-2"
       >
@@ -135,6 +135,7 @@ export default {
   computed: {
     ...mapGetters({
       getData: 'getData',
+      getFilteredData: 'getFilteredData',
     }),
   },
 }
