@@ -33,11 +33,14 @@
 
         <div class="wrapper d-flex">
           <div class="select-field origin">
-            <div class="label" :class="{ active: activeInput === 2 || origin }">
+            <div
+              class="label"
+              :class="{ active: activeInput === 2 || origin.length > 0 }"
+            >
               Origin
             </div>
-            <div v-if="origin" class="value">
-              {{ origin }}
+            <div v-if="origin.length > 0" class="value">
+              {{ origin.length }} selected
             </div>
             <multiselect
               v-model="origin"
@@ -76,18 +79,18 @@
         <div class="select-field destination">
           <div
             class="label"
-            :class="{ active: activeInput === 4 || destination }"
+            :class="{ active: activeInput === 4 || destination.length > 0 }"
           >
             Destination
           </div>
-          <div v-if="destination" class="value">
-            {{ destination }}
+          <div v-if="destination.length > 0" class="value">
+            {{ destination.length }} selected
           </div>
           <multiselect
             v-model="destination"
-            :options="originOptions"
-            :multiple="false"
-            :close-on-select="true"
+            :options="destinationOptions"
+            :multiple="true"
+            :close-on-select="false"
             :searchable="false"
             :show-labels="false"
             placeholder=""
@@ -108,7 +111,7 @@
           </div>
           <multiselect
             v-model="excludedCities"
-            :options="originOptions.slice(1)"
+            :options="excludedCitiesOptions"
             :multiple="true"
             :close-on-select="false"
             :searchable="false"
@@ -422,79 +425,124 @@
       </div>
     </div>
 
-    <div class="filters__result mt-2 d-flex justify-content-between">
-      <div class="left flex-fill">
-        <div class="results__quantity">Showing 1 - 100 of 573 results</div>
+    <div class="filters__result mt-2">
+      <div class="top d-flex justify-content-between">
+        <div class="left">
+          <div class="results__quantity">
+            Showing {{ filteredData.length ? '1' : '0' }} -
+            {{ filteredData.length }} of {{ filteredData.length }} results
+          </div>
 
-        <div class="selected-filters mt-3">
-          <span
-            v-for="f in filtersArray"
-            :key="f[0] + f[1]"
-            class="selected-filters__tag"
-          >
-            {{ f[0] }}: {{ f[1] }}
-            <span class="tag-close" @click="removeFilter(f)">&times;</span>
-          </span>
+          <div class="selected-filters mt-3">
+            <span
+              v-for="f in filtersArray"
+              :key="f[0] + f[1]"
+              class="selected-filters__tag"
+            >
+              {{ f[0] }}: {{ f[1] }}
+              <span class="tag-close" @click="removeFilter(f)">&times;</span>
+            </span>
+          </div>
+
+          <div class="selected-filters__btns mt-2">
+            <span>Create Post a Truck Order</span>
+            |
+            <span @click="clearFilters">Clear filters</span>
+          </div>
         </div>
 
-        <div class="selected-filters__btns mt-2">
-          <span>Create Post a Truck Order</span>
-          |
-          <span>Clear filters</span>
-        </div>
-
-        <div class="selected-filters__controls mt-3 d-flex">
-          <client-only>
-            <div class="range d-flex flex-column">
-              <multi-range-slider
-                :base-class-name="'multi-range-slider'"
-                :min="0"
-                :max="10"
-                :step="0.1"
-                :min-value="barMinValue"
-                :max-value="barMaxValue"
-                @input="updateBar"
-              />
-              <div class="range-value text-center mt-3">
-                Range: {{ barMinValue + 'X' }} - {{ barMaxValue + 'X' }}
+        <div class="right text-right">
+          <div class="results__controls mt-2">
+            <nobr>
+              <span class="refresh-text mr-2">Turn on auto refresh</span>
+              <b-icon-arrow-clockwise class="mr-2" />
+              <b-icon-pause-circle-fill class="mr-2" />
+              <span class="refresh-text mr-2">Last updated 2s</span>
+              <b-icon-gear />
+            </nobr>
+          </div>
+          <b-dropdown variant="light" no-caret class="mt-2">
+            <template #button-content>
+              <div class="results__date d-inline-flex align-items-center">
+                <b-icon-sort-up />
+                <span class="ml-1">Start date</span>
               </div>
-            </div>
-          </client-only>
-
-          <div class="checkboxes">
-            <b-form-checkbox v-model="isHighlightedAtTop">
-              Highlighted at the top
-            </b-form-checkbox>
-            <b-form-checkbox v-model="isClickToBook">
-              Click-to-book
-            </b-form-checkbox>
-          </div>
-
-          <div class="checkboxes">
-            <b-form-checkbox v-model="isRefreshRange">
-              Refresh Range
-            </b-form-checkbox>
-          </div>
+            </template>
+            <b-dropdown-item-button @click="sortData('startDateNearest')"
+              >Start date Nearest</b-dropdown-item-button
+            >
+            <b-dropdown-item-button @click="sortData('startDateFarthest')"
+              >Start date Farthest</b-dropdown-item-button
+            >
+            <b-dropdown-item-button @click="sortData('ageOldest')"
+              >Age Oldest</b-dropdown-item-button
+            >
+            <b-dropdown-item-button @click="sortData('ageNewest')"
+              >Age Newest</b-dropdown-item-button
+            >
+            <b-dropdown-item-button @click="sortData('pricePerDistanceLowest')"
+              >Price per distance Lowest</b-dropdown-item-button
+            >
+            <b-dropdown-item-button @click="sortData('pricePerDistanceHighest')"
+              >Price per distance Highest</b-dropdown-item-button
+            >
+            <b-dropdown-item-button @click="sortData('distanceShortest')"
+              >Distance Shortest</b-dropdown-item-button
+            >
+            <b-dropdown-item-button @click="sortData('distanceLongest')"
+              >Distance Longest</b-dropdown-item-button
+            >
+            <b-dropdown-item-button @click="sortData('payoutLowest')"
+              >Payout Lowest</b-dropdown-item-button
+            >
+            <b-dropdown-item-button @click="sortData('payoutHighest')"
+              >Payout Highest</b-dropdown-item-button
+            >
+          </b-dropdown>
         </div>
       </div>
 
-      <div class="right">
-        <div class="results__controls mt-2">
-          <span class="refresh-text mr-n2">Next Refresh 72s</span>
-          <b-icon-arrow-clockwise />
-          <b-icon-pause-circle-fill />
-          <b-icon-gear />
+      <div class="bottom d-flex justify-content-between">
+        <div class="left">
+          <div class="selected-filters__controls mt-3 d-flex">
+            <client-only>
+              <div class="range d-flex flex-column">
+                <multi-range-slider
+                  :base-class-name="'multi-range-slider'"
+                  :min="0"
+                  :max="10"
+                  :step="0.1"
+                  :min-value="barMinValue"
+                  :max-value="barMaxValue"
+                  @input="updateBar"
+                />
+                <div class="range-value text-center mt-3">
+                  Range: {{ barMinValue + 'X' }} - {{ barMaxValue + 'X' }}
+                </div>
+              </div>
+            </client-only>
+
+            <div class="checkboxes">
+              <b-form-checkbox v-model="isHighlightedAtTop">
+                Highlighted at the top
+              </b-form-checkbox>
+              <b-form-checkbox v-model="isClickToBook">
+                Click-to-book
+              </b-form-checkbox>
+            </div>
+
+            <div class="checkboxes">
+              <b-form-checkbox v-model="isRefreshRange">
+                Refresh Range
+              </b-form-checkbox>
+            </div>
+          </div>
         </div>
 
-        <div
-          class="results__date mt-3 d-flex align-items-center justify-content-end"
-        >
-          <b-icon-sort-up />
-          <span class="ml-1">Start date</span>
-        </div>
-
-        <div class="results__play-btn mt-3 text-right">
-          <b-icon-play-fill />
+        <div class="right">
+          <div class="results__play-btn mt-3 text-right">
+            <b-icon-play-fill />
+          </div>
         </div>
       </div>
     </div>
@@ -533,7 +581,7 @@ export default {
       workType: [],
       origin: [],
       radius: null,
-      destination: null,
+      destination: [],
       excludedCities: [],
       startDate: null,
       startTime: null,
@@ -550,10 +598,11 @@ export default {
       minHours: null,
       maxHours: null,
 
-      allData: [],
       workOpportunities: ['Block', 'One-way', 'Round-trips'],
       originOptions: [],
+      destinationOptions: [],
       radiusOptions: ['Any', 10, 20, 50, 100],
+      excludedCitiesOptions: [],
       trailerOptions: ['Provided', 'Required'],
       equipmentOptions: [
         "53' Trailer",
@@ -586,6 +635,7 @@ export default {
   computed: {
     ...mapGetters({
       getData: 'getData',
+      filteredData: 'getFilteredData',
     }),
     filtersObject() {
       const values = [
@@ -611,9 +661,6 @@ export default {
       ]
       const result = {}
       values.forEach((val) => {
-        // filterArray.push({
-        //   [val[0]]: val[1],
-        // })
         if (
           (Array.isArray(val[1]) && val[1].length) ||
           (!Array.isArray(val[1]) && val[1])
@@ -622,7 +669,6 @@ export default {
         }
       })
       return result
-      // return result
     },
     filtersArray() {
       const result = []
@@ -646,15 +692,14 @@ export default {
     },
   },
   mounted() {
-    this.allData = this.getData
     this.fillOriginOptions()
+    this.fillDestinationOptions()
+    this.fillExcludedCities()
   },
   methods: {
     ...mapActions({
-      workTypeAction: 'filterWorkType',
-      originAction: 'filterOriginAction',
-      fillData: 'fillData',
       bigDaddy: 'bigDaddy',
+      sortData: 'sortData',
     }),
     removeFilter(f) {
       const type = f[0]
@@ -676,11 +721,31 @@ export default {
       })
       this.originOptions = ['Anywhere', ...originOptionsSet]
     },
-    filterWorkType(filterVals) {
-      this.workTypeAction(filterVals)
+    fillDestinationOptions() {
+      const destinationOptionsSet = new Set()
+      this.getData.forEach((el) => {
+        destinationOptionsSet.add(
+          `${el.destination.city}, ${el.destination.state}`
+        )
+      })
+      this.destinationOptions = ['Anywhere', ...destinationOptionsSet]
     },
-    filterOrigin(filterVals) {
-      this.originAction(filterVals)
+    fillExcludedCities() {
+      const excludedCitiesSet = new Set()
+      this.getData.forEach((el) => {
+        excludedCitiesSet.add(el.origin.city)
+        excludedCitiesSet.add(el.destination.city)
+      })
+      this.excludedCitiesOptions = [...excludedCitiesSet]
+    },
+    clearFilters() {
+      for (const key in this.filtersObject) {
+        if (Array.isArray(this.filtersObject[key])) {
+          this[key] = []
+        } else {
+          this[key] = null
+        }
+      }
     },
   },
 }

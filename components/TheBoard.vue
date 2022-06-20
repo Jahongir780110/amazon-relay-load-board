@@ -123,7 +123,7 @@ export default {
 
   filters: {
     formattedDate(value) {
-      return moment(value).format('ddd MMM YY HH:mm')
+      return moment(value).utc().format('ddd MMM DD HH:mm')
     },
     formattedTime(value) {
       return moment(value).format('H[h] m[m]')
@@ -134,9 +134,13 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getData: 'getData',
       getFilteredData: 'getFilteredData',
     }),
+  },
+  watch: {
+    getFilteredData(val) {
+      console.log('getFilteredData', val)
+    },
   },
 }
 </script>
