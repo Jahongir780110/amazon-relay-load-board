@@ -346,6 +346,9 @@ export const actions = {
     console.log('maxHoursResult', set)
     return [...set]
   },
+  sortData({ state, commit }, val) {
+    console.log('val', val)
+  },
 }
 
 export const getters = {

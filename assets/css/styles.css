@@ -289,6 +289,22 @@ body {
 /* =========================== filters footer end =========================== */
 
 /* =========================== filters result start =========================== */
+.filters__result .top {
+  background-color: #f8f8f8;
+}
+
+.filters__result .top .right .dropdown-toggle {
+  text-decoration: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  background-color: transparent !important;
+}
+
+.filters__result .top .right .dropdown-menu li button:active {
+  background-color: #e9ecef !important;
+  color: #16181b !important;
+}
 
 .selected-filters {
   display: flex;
@@ -400,11 +416,8 @@ body {
 }
 
 .results__date {
+  display: inline-block;
   color: #1d8b96;
-}
-
-.results__date span,
-.results__date svg {
   cursor: pointer;
 }
 
@@ -709,4 +722,8 @@ body {
 .input-field .label.active {
   font-size: 12px;
   top: 2px;
+}
+
+.multi-range-slider .thumb .caption * {
+  background-color: #1d8b96 !important;
 }
