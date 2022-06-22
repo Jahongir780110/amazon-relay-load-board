@@ -471,7 +471,7 @@ body {
 }
 
 .board__from {
-  width: 220px;
+  width: 210px;
 }
 
 .board__from .location {
@@ -495,7 +495,7 @@ body {
 }
 
 .board__to {
-  width: 220px;
+  width: 210px;
 }
 
 .board__to .location {
@@ -506,7 +506,7 @@ body {
 }
 
 .board__info {
-  width: 70px;
+  width: 90px;
   text-align: right;
 }
 

@@ -454,9 +454,15 @@
         <div class="right text-right">
           <div class="results__controls mt-2">
             <nobr>
-              <span class="refresh-text mr-2">Turn on auto refresh</span>
+              <span v-if="!isAutoRefresh" class="refresh-text mr-2"
+                >Turn on auto refresh</span
+              >
               <b-icon-arrow-clockwise class="mr-2" />
-              <b-icon-pause-circle-fill class="mr-2" />
+              <b-icon-pause-circle-fill v-if="isAutoRefresh" class="mr-2" />
+              <b-icon-play-circle-fill
+                v-if="!isAutoRefresh"
+                class="mr-2"
+              ></b-icon-play-circle-fill>
               <span class="refresh-text mr-2">Last updated 2s</span>
               <b-icon-gear />
             </nobr>
@@ -464,38 +470,50 @@
           <b-dropdown variant="light" no-caret class="mt-2">
             <template #button-content>
               <div class="results__date d-inline-flex align-items-center">
-                <b-icon-sort-up />
-                <span class="ml-1">Start date</span>
+                <b-icon-sort-up
+                  v-if="
+                    getSortType.split(' ').slice(-1)[0] === 'Farthest' ||
+                    getSortType.split(' ').slice(-1)[0] === 'Oldest' ||
+                    getSortType.split(' ').slice(-1)[0] === 'Highest' ||
+                    getSortType.split(' ').slice(-1)[0] === 'Longest'
+                  "
+                />
+                <b-icon-sort-down v-else />
+                <span class="ml-1">{{
+                  getSortType.split(' ').slice(0, -1).join(' ')
+                }}</span>
               </div>
             </template>
-            <b-dropdown-item-button @click="sortData('startDateNearest')"
+            <b-dropdown-item-button @click="sortData('Start date Nearest')"
               >Start date Nearest</b-dropdown-item-button
             >
-            <b-dropdown-item-button @click="sortData('startDateFarthest')"
+            <b-dropdown-item-button @click="sortData('Start date Farthest')"
               >Start date Farthest</b-dropdown-item-button
             >
-            <b-dropdown-item-button @click="sortData('ageOldest')"
+            <b-dropdown-item-button @click="sortData('Age Oldest')"
               >Age Oldest</b-dropdown-item-button
             >
-            <b-dropdown-item-button @click="sortData('ageNewest')"
+            <b-dropdown-item-button @click="sortData('Age Newest')"
               >Age Newest</b-dropdown-item-button
             >
-            <b-dropdown-item-button @click="sortData('pricePerDistanceLowest')"
+            <b-dropdown-item-button
+              @click="sortData('Price per distance Lowest')"
               >Price per distance Lowest</b-dropdown-item-button
             >
-            <b-dropdown-item-button @click="sortData('pricePerDistanceHighest')"
+            <b-dropdown-item-button
+              @click="sortData('Price per distance Highest')"
               >Price per distance Highest</b-dropdown-item-button
             >
-            <b-dropdown-item-button @click="sortData('distanceShortest')"
+            <b-dropdown-item-button @click="sortData('Distance Shortest')"
               >Distance Shortest</b-dropdown-item-button
             >
-            <b-dropdown-item-button @click="sortData('distanceLongest')"
+            <b-dropdown-item-button @click="sortData('Distance Longest')"
               >Distance Longest</b-dropdown-item-button
             >
-            <b-dropdown-item-button @click="sortData('payoutLowest')"
+            <b-dropdown-item-button @click="sortData('Payout Lowest')"
               >Payout Lowest</b-dropdown-item-button
             >
-            <b-dropdown-item-button @click="sortData('payoutHighest')"
+            <b-dropdown-item-button @click="sortData('Payout Highest')"
               >Payout Highest</b-dropdown-item-button
             >
           </b-dropdown>
@@ -556,8 +574,10 @@ import {
   BIconChevronDown,
   BIconArrowClockwise,
   BIconPauseCircleFill,
+  BIconPlayCircleFill,
   BIconGear,
   BIconSortUp,
+  BIconSortDown,
   BIconPlayFill,
   BIconCalendar3,
   BIconClock,
@@ -570,8 +590,10 @@ export default {
     BIconChevronDown,
     BIconArrowClockwise,
     BIconPauseCircleFill,
+    BIconPlayCircleFill,
     BIconGear,
     BIconSortUp,
+    BIconSortDown,
     BIconPlayFill,
     BIconCalendar3,
     BIconClock,
@@ -630,12 +652,14 @@ export default {
       isHighlightedAtTop: false,
       isClickToBook: false,
       isRefreshRange: false,
+      isAutoRefresh: false,
     }
   },
   computed: {
     ...mapGetters({
       getData: 'getData',
       filteredData: 'getFilteredData',
+      getSortType: 'getSortType',
     }),
     filtersObject() {
       const values = [

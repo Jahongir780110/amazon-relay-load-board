@@ -126,7 +126,7 @@ export default {
       return moment(value).utc().format('ddd MMM DD HH:mm')
     },
     formattedTime(value) {
-      return moment(value).format('H[h] m[m]')
+      return moment(value).format('D[d] H[h] m[m]')
     },
   },
   data() {
