@@ -1,5 +1,6 @@
 const fs = require('fs')
 const allData = require('./all_data.json')
+
 const trucks = [
   "53' Trailer",
   "26' Truck",
@@ -13,7 +14,6 @@ const trucks = [
   "40' HC Container",
   "45' HC Container",
 ]
-
 const workTypes = ['One-way', 'Round-trips', 'Block']
 
 const filteredData = allData.map((data) => {
@@ -42,7 +42,7 @@ const filteredData = allData.map((data) => {
 })
 
 const result = JSON.stringify(filteredData)
-fs.writeFile('../static/filtered_data.json', result, 'utf8', function (err) {
+fs.writeFile('./filtered_data.json', result, 'utf8', function (err) {
   if (err) {
     console.log('err', err)
   }

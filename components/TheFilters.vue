@@ -470,52 +470,20 @@
           <b-dropdown variant="light" no-caret class="mt-2">
             <template #button-content>
               <div class="results__date d-inline-flex align-items-center">
-                <b-icon-sort-up
-                  v-if="
-                    getSortType.split(' ').slice(-1)[0] === 'Farthest' ||
-                    getSortType.split(' ').slice(-1)[0] === 'Oldest' ||
-                    getSortType.split(' ').slice(-1)[0] === 'Highest' ||
-                    getSortType.split(' ').slice(-1)[0] === 'Longest'
-                  "
-                />
+                <b-icon-sort-up v-if="isSortUp" />
                 <b-icon-sort-down v-else />
                 <span class="ml-1">{{
                   getSortType.split(' ').slice(0, -1).join(' ')
                 }}</span>
               </div>
             </template>
-            <b-dropdown-item-button @click="sortData('Start date Nearest')"
-              >Start date Nearest</b-dropdown-item-button
-            >
-            <b-dropdown-item-button @click="sortData('Start date Farthest')"
-              >Start date Farthest</b-dropdown-item-button
-            >
-            <b-dropdown-item-button @click="sortData('Age Oldest')"
-              >Age Oldest</b-dropdown-item-button
-            >
-            <b-dropdown-item-button @click="sortData('Age Newest')"
-              >Age Newest</b-dropdown-item-button
-            >
             <b-dropdown-item-button
-              @click="sortData('Price per distance Lowest')"
-              >Price per distance Lowest</b-dropdown-item-button
+              v-for="option in sortOptions"
+              :key="option"
+              @click="sortData(option)"
             >
-            <b-dropdown-item-button
-              @click="sortData('Price per distance Highest')"
-              >Price per distance Highest</b-dropdown-item-button
-            >
-            <b-dropdown-item-button @click="sortData('Distance Shortest')"
-              >Distance Shortest</b-dropdown-item-button
-            >
-            <b-dropdown-item-button @click="sortData('Distance Longest')"
-              >Distance Longest</b-dropdown-item-button
-            >
-            <b-dropdown-item-button @click="sortData('Payout Lowest')"
-              >Payout Lowest</b-dropdown-item-button
-            >
-            <b-dropdown-item-button @click="sortData('Payout Highest')"
-              >Payout Highest</b-dropdown-item-button
-            >
+              {{ option }}
+            </b-dropdown-item-button>
           </b-dropdown>
         </div>
       </div>
@@ -653,6 +621,18 @@ export default {
       isClickToBook: false,
       isRefreshRange: false,
       isAutoRefresh: false,
+      sortOptions: [
+        'Start date Nearest',
+        'Start date Farthest',
+        'Age Oldest',
+        'Age Nearest',
+        'Price per distance Lowest',
+        'Price per distance Highest',
+        'Distance Shortest',
+        'Distance Longest',
+        'Payout Lowest',
+        'Payout Highest',
+      ],
     }
   },
   computed: {
@@ -709,6 +689,16 @@ export default {
       }
       return result
     },
+    isSortUp() {
+      const sortType =
+        this.getSortType.split(' ')[this.getSortType.split(' ').length - 1]
+      return (
+        sortType === 'Farthest' ||
+        sortType === 'Oldest' ||
+        sortType === 'Highest' ||
+        sortType === 'Longest'
+      )
+    },
   },
   watch: {
     filtersObject(val) {
@@ -719,6 +709,7 @@ export default {
     this.fillOriginOptions()
     this.fillDestinationOptions()
     this.fillExcludedCities()
+    this.sortData(this.getSortType)
   },
   methods: {
     ...mapActions({

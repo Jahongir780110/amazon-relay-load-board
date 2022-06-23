@@ -19,9 +19,9 @@
 
         <div class="board__from">
           <div class="location">
-            {{ data.origin.label }} {{ data.origin.city }},
-            {{ data.origin.state }}
-            {{ data.origin.postalCode }}
+            {{
+              `${data.origin.label} ${data.origin.city}, ${data.origin.state} ${data.origin.postalCode}`
+            }}
           </div>
           <div class="date text-secondary">
             {{ data.firstPickupTime | formattedDate }}
@@ -41,8 +41,9 @@
 
         <div class="board__to">
           <div class="location">
-            {{ data.destination.label }} {{ data.destination.city }},
-            {{ data.destination.state }} {{ data.destination.postalCode }}
+            {{
+              `${data.destination.label} ${data.destination.city}, ${data.destination.state} ${data.destination.postalCode}`
+            }}
           </div>
           <div class="date text-secondary">
             {{ data.lastDeliveryTime | formattedDate }}
@@ -126,7 +127,12 @@ export default {
       return moment(value).utc().format('ddd MMM DD HH:mm')
     },
     formattedTime(value) {
-      return moment(value).format('D[d] H[h] m[m]')
+      const dayInMilliseconds = 1000 * 60 * 60 * 24
+      const hourInMilliseconds = 1000 * 60 * 60
+      const days = Math.floor(value / dayInMilliseconds)
+      const hours = Math.floor((value % dayInMilliseconds) / hourInMilliseconds)
+      const minutes = Math.floor((value % hourInMilliseconds) / (1000 * 60))
+      return `${days}d ${hours}h ${minutes}m`
     },
   },
   data() {
@@ -136,11 +142,6 @@ export default {
     ...mapGetters({
       getFilteredData: 'getFilteredData',
     }),
-  },
-  watch: {
-    getFilteredData(val) {
-      console.log('getFilteredData', val)
-    },
   },
 }
 </script>
