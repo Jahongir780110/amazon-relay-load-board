@@ -454,16 +454,24 @@
         <div class="right text-right">
           <div class="results__controls mt-2">
             <nobr>
-              <span v-if="!isAutoRefresh" class="refresh-text mr-2"
-                >Turn on auto refresh</span
+              <span class="refresh-text mr-2"
+                >Next refresh {{ nextRefreshTime }}s</span
               >
-              <b-icon-arrow-clockwise class="mr-2" />
-              <b-icon-pause-circle-fill v-if="isAutoRefresh" class="mr-2" />
-              <b-icon-play-circle-fill
-                v-if="!isAutoRefresh"
+
+              <b-icon-arrow-clockwise class="mr-2" @click="refresh" />
+
+              <b-icon-pause-circle-fill
+                v-if="!isPaused"
                 class="mr-2"
-              ></b-icon-play-circle-fill>
-              <span class="refresh-text mr-2">Last updated 2s</span>
+                @click="pauseRefresh"
+              />
+
+              <b-icon-play-circle-fill
+                v-else
+                class="mr-2"
+                @click="playRefresh"
+              />
+
               <b-icon-gear />
             </nobr>
           </div>
@@ -526,8 +534,11 @@
         </div>
 
         <div class="right">
-          <div class="results__play-btn mt-3 text-right">
-            <b-icon-play-fill />
+          <div
+            class="results__play-btn mt-3 text-right"
+            :class="{ active: isAutoRefresh }"
+          >
+            <b-icon-play-fill @click="toggleAutoRefresh" />
           </div>
         </div>
       </div>
@@ -620,7 +631,6 @@ export default {
       isHighlightedAtTop: false,
       isClickToBook: false,
       isRefreshRange: false,
-      isAutoRefresh: false,
       sortOptions: [
         'Start date Nearest',
         'Start date Farthest',
@@ -633,6 +643,10 @@ export default {
         'Payout Lowest',
         'Payout Highest',
       ],
+      interval: null,
+      nextRefreshTime: 30,
+      isPaused: false,
+      isAutoRefresh: false,
     }
   },
   computed: {
@@ -704,17 +718,29 @@ export default {
     filtersObject(val) {
       this.bigDaddy(val)
     },
+    nextRefreshTime(val) {
+      if (val === -1) {
+        this.refresh()
+      }
+    },
   },
   mounted() {
     this.fillOriginOptions()
     this.fillDestinationOptions()
     this.fillExcludedCities()
     this.sortData(this.getSortType)
+
+    this.interval = setInterval(() => {
+      this.nextRefreshTime--
+    }, 1000)
   },
   methods: {
     ...mapActions({
       bigDaddy: 'bigDaddy',
       sortData: 'sortData',
+      refreshData: 'refreshData',
+      autoRefreshData: 'autoRefreshData',
+      stopAutoRefreshData: 'stopAutoRefreshData',
     }),
     removeFilter(f) {
       const type = f[0]
@@ -760,6 +786,34 @@ export default {
         } else {
           this[key] = null
         }
+      }
+    },
+    refresh() {
+      this.isPaused = false
+      this.nextRefreshTime = 30
+      clearInterval(this.interval)
+      this.interval = setInterval(() => {
+        this.nextRefreshTime--
+      }, 1000)
+      this.refreshData()
+    },
+    pauseRefresh() {
+      this.isPaused = true
+      clearInterval(this.interval)
+    },
+    playRefresh() {
+      this.isPaused = false
+      clearInterval(this.interval)
+      this.interval = setInterval(() => {
+        this.nextRefreshTime--
+      }, 1000)
+    },
+    toggleAutoRefresh() {
+      this.isAutoRefresh = !this.isAutoRefresh
+      if (this.isAutoRefresh) {
+        this.autoRefreshData()
+      } else {
+        this.stopAutoRefreshData()
       }
     },
   },

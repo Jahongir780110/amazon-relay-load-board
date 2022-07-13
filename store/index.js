@@ -1,19 +1,28 @@
-const jsonData = require('../data/filtered_data.json')
+const allData = require('../data/filtered_data.json')
+
+const jsonData = allData.slice(0, 60)
+const remaining = allData.slice(60)
 
 function intersection(arrayA, arrayB) {
   if (arrayA.length === 0) return arrayB
   return arrayA.filter((value) => arrayB.includes(value))
 }
 
+let timer = null
+
 export const state = () => ({
   data: jsonData,
   filteredData: jsonData,
   sortType: 'Start date Nearest',
+  remainingData: remaining,
 })
 
 export const mutations = {
   setFilteredData(state, payload) {
     state.filteredData = payload
+  },
+  setRemainingData(state, payload) {
+    state.remainingData = payload
   },
   setSortType(state, payload) {
     state.sortType = payload
@@ -242,6 +251,32 @@ export const actions = {
 
     commit('setFilteredData', data)
     commit('setSortType', val)
+  },
+  refreshData({ state, commit }) {
+    const randomQuantity = Math.floor(Math.random() * 3)
+    const remainingData = [...state.remainingData]
+
+    if (randomQuantity === 0) return
+
+    const takenData = remainingData.slice(0, randomQuantity)
+
+    commit('setFilteredData', takenData.concat(state.filteredData))
+
+    commit('setRemainingData', remainingData.slice(randomQuantity))
+    commit('setRemainingData', state.remainingData.concat(takenData))
+  },
+
+  autoRefreshData({ dispatch }) {
+    const randomTime = Math.floor(5 + Math.random() * 15)
+
+    timer = setTimeout(() => {
+      dispatch('refreshData')
+      dispatch('autoRefreshData')
+    }, randomTime * 1000)
+  },
+
+  stopAutoRefreshData() {
+    clearTimeout(timer)
   },
 }
 

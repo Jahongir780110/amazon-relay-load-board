@@ -426,6 +426,10 @@ body {
   font-size: 32px;
 }
 
+.results__play-btn.active {
+  color: #ea8101;
+}
+
 .results__play-btn svg {
   cursor: pointer;
   margin-right: 40px;
