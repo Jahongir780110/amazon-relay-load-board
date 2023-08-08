@@ -1,5 +1,5 @@
 export default {
-  // Global page headers: https://go.nuxtjs.dev/config-head
+  // Global page headers: https://go.xtjs.dev/config-head
   head: {
     title: 'amazon-relay-load-board',
     htmlAttrs: {
@@ -13,14 +13,14 @@ export default {
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
 
-  // Global CSS: https://go.nuxtjs.dev/config-css
+  // Global CSS: https://go.xtjs.dev/config-css
   css: [
     '@assets/css/normalize.css',
     'vue-multiselect/dist/vue-multiselect.min.css',
     '@assets/css/styles.css'
   ],
 
-  // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
+  // Plugins to run before rendering page: https://go.xtjs.dev/config-plugins
   plugins: [
     {
       src: '~/plugins/multi-range-slider.js',
@@ -32,28 +32,28 @@ export default {
     }
   ],
 
-  // Auto import components: https://go.nuxtjs.dev/config-components
+  // Auto import components: https://go.xtjs.dev/config-components
   components: true,
 
-  // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
+  // Modules for dev and build (recommended): https://go.xtjs.dev/config-modules
   buildModules: [
-    // https://go.nuxtjs.dev/eslint
-    '@nuxtjs/eslint-module',
-    // https://go.nuxtjs.dev/stylelint
-    '@nuxtjs/stylelint-module'
+    // https://go.xtjs.dev/eslint
+    '@xtjs/eslint-module',
+    // https://go.xtjs.dev/stylelint
+    '@xtjs/stylelint-module'
   ],
 
-  // Modules: https://go.nuxtjs.dev/config-modules
+  // Modules: https://go.xtjs.dev/config-modules
   modules: [
-    // https://go.nuxtjs.dev/bootstrap
-    'bootstrap-vue/nuxt',
-    // https://go.nuxtjs.dev/axios
-    '@nuxtjs/axios'
+    // https://go.xtjs.dev/bootstrap
+    'bootstrap-vue/xt',
+    // https://go.xtjs.dev/axios
+    '@xtjs/axios'
   ],
 
-  // Axios module configuration: https://go.nuxtjs.dev/config-axios
+  // Axios module configuration: https://go.xtjs.dev/config-axios
   axios: {},
 
-  // Build Configuration: https://go.nuxtjs.dev/config-build
+  // Build Configuration: https://go.xtjs.dev/config-build
   build: {}
 }
